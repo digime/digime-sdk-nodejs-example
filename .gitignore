@@ -1,0 +1,14 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+*.log.*
+
+# Dependency directories
+node_modules
+
+# Output
+dist/
+
+# Mac related
+.DS_Store
