@@ -1,0 +1,15 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+*.log.*
+
+# Dependency directories
+node_modules
+
+# Mac related
+.DS_Store
+
+# dev
+dev
+path-to-your.key

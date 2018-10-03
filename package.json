@@ -1,0 +1,32 @@
+{
+  "name": "digime-js-sdk-example",
+  "version": "0.0.1",
+  "description": "digime-js-sdk-example",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0",
+    "lint": "exit 0",
+    "build": "exit 0",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digime/digime-js-sdk-example.git"
+  },
+  "author": "digi.me Limited",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/digime/digime-js-sdk-example/issues"
+  },
+  "homepage": "https://github.com/digime/digime-js-sdk-example#readme",
+  "devDependencies": {
+    "@types/ip": "0.0.31",
+    "ejs": "~2.6.1",
+    "express": "~4.16.3",
+    "ip": "~1.1.5"
+  },
+  "dependencies": {
+    "digime-js-sdk": "~0.1.2",
+    "lodash.trimend": "~4.5.1"
+  }
+}
