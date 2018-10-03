@@ -1,0 +1,25 @@
+<% include ../partials/header %>
+
+<div class="main-container">
+    <div class="consent-text">
+        <ul>
+            <li>We need your consent to view your data.
+                To do so we use the digi.me private sharing platform to respect and protect your information.</li>
+            <li>Please ensure you have the digi.me client installed on your iOS or Android device. </li>
+            <li>You can find the links <a href="https://digi.me/" target="_blank">here</a></li>
+            <li>There are two ways for users to give consent to your digi.me library:</br></br>
+                1. <b>"Launch web consent request"</b> - Guest consent (demo) - We can offer a guest consent flow which asks for the user data from the browser. As part of this flow, the users will need to go through the adding of services to provide the data to be shared to your application.</br></br>
+                2. <b>"Launch native app consent request"</b> - This flow is using digi.me apps (recommended) - For this you need to have digi.me client installed on your device.
+            </li>
+        </ul>
+    </div>
+    <a class="consent-url" href="<%= weburl %>">
+        <div class="consent-button">Launch web consent request</div>
+    </a>
+    </br>
+    <a class="consent-url" href="<%= appurl %>">
+        <div class="consent-button">Launch native app consent request</div>
+    </a>
+</div>
+
+<% include ../partials/footer %>
