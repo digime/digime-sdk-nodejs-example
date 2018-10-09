@@ -20,5 +20,8 @@
   "devDependencies": {
     "ejs": "~2.6.1",
     "express": "~4.16.3"
+  },
+  "dependencies": {
+    "digime-js-sdk": "github:digime/digime-js-sdk#dist-beta"
   }
 }

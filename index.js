@@ -1,5 +1,5 @@
 const express = require("express");
-const { establishSession, getAppURL, getDataForSession } = require("../digime-js-sdk/dist/sdk");
+const { establishSession, getAppURL, getDataForSession } = require("digime-js-sdk");
 const fs = require("fs");
 const path = require("path");
 
