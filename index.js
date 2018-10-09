@@ -17,18 +17,17 @@ const APP = {
 app.get('/', (req, res) => {
     establishSession(APP.appId, APP.contractId).then((session) => {
         var data = {
-            url: getAppURL(APP.appId, session, "http://localhost:8081/return?sessionId=" + session.sessionKey)
+            url: getAppURL(APP.appId, session, "http://[INSERT_IP_ADDRESS_HERE]:8081/return?sessionId=" + session.sessionKey)
         };
         res.render('pages/index', data);
     });
 });
 
 app.get("/return", (req, res) => {
-
-    const result = req.query.result;
+    const result = req.query.consent;
 
     // Data is ready to be consumed
-    if (result === "DATA_READY") {
+    if (result === "APPROVED") {
 
         const data = getDataForSession(
             req.query.sessionId,
