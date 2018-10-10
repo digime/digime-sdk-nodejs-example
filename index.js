@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
 const { createSDK } = require("digime-js-sdk");
-const { establishSession, getAppURL, getDataForSession } = createSDK({ path: "api.test06.devdigi.me" });
+const { establishSession, getAppURL, getDataForSession } = createSDK({ host: "api.test06.devdigi.me" });
 
 // Options that we will pass to the Digi.me SDK
 const APP = {
