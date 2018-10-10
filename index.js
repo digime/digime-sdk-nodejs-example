@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
         const url = getAppURL(
             APP.appId,
             session,
-            `http://${req.headers.host}/return?sessionId=` + session.sessionKey
+            `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
         )
 
         // Present the generated URL with a pretty template
