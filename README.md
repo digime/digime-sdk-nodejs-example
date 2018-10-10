@@ -52,4 +52,4 @@ You need to have an Android or iOS device with the digi.me client installed. Cur
 
 2. **Provide consent** - If you have the digi.me client installed, you should be able to complete the consent access flow. Click on the `Launch Consent Request` button in the starting page. It should bring up the digi.me client and prompt you for consent. Once the user gives consent, the user should be taken to a new page on the browser which displays `Thank you for your data!`
 
-3. **See data shared** - In the same terminal where you got the URLs for the app, you should now see the data that is shared from the user. This is what the user has given consent to in the previous step.
+3. **See data shared** - In the same terminal where you got the URLs for the app, you should now see the data that is shared from the user. This is what the user has given consent to in the previous step. NOTE: At the moment you may see 404 errors when trying to read the files. This is because the files are still being prepared and may not be ready yet. We will add support for retrying using exponential backoff in upcoming releases of the SDK.
