@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/digime/digime-js-sdk-example#readme",
   "devDependencies": {
+    "@types/ip": "0.0.31",
     "ejs": "~2.6.1",
-    "express": "~4.16.3"
+    "express": "~4.16.3",
+    "ip": "~1.1.5"
   },
   "dependencies": {
     "digime-js-sdk": "github:digime/digime-js-sdk#dist-beta"
