@@ -1,5 +1,5 @@
 const express = require("express");
-const { establishSession, getAppURL, getDataForSession } = require("digime-js-sdk");
+const { createSDK } = require("digime-js-sdk");
 const fs = require("fs");
 const path = require("path");
 
@@ -8,6 +8,8 @@ const port = 8081;
 
 app.set('view engine', 'ejs');
 
+const customSDK = createSDK({path: "api.test04.devdigi.me"});
+
 const APP = {
     appId: "[INSERT YOUR APP ID HERE]",
     contractId: "[INSERT YOUR CONTRACT ID HERE]",
@@ -15,9 +17,9 @@ const APP = {
 };
 
 app.get('/', (req, res) => {
-    establishSession(APP.appId, APP.contractId).then((session) => {
+    customSDK.establishSession(APP.appId, APP.contractId).then((session) => {
         var data = {
-            url: getAppURL(APP.appId, session, "http://[INSERT_IP_ADDRESS_HERE]:8081/return?sessionId=" + session.sessionKey)
+            url: customSDK.getAppURL(APP.appId, session, "http://[INSERT_IP_ADDRESS_HERE]:8081/return?sessionId=" + session.sessionKey)
         };
         res.render('pages/index', data);
     });
@@ -29,7 +31,7 @@ app.get("/return", (req, res) => {
     // Data is ready to be consumed
     if (result === "APPROVED") {
 
-        const data = getDataForSession(
+        const data = customSDK.getDataForSession(
             req.query.sessionId,
             APP.key,
             (fileData) => {
