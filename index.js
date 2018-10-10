@@ -113,4 +113,10 @@ app.get("/return", (req, res) => {
     res.render('pages/return');
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => {
+    console.log([
+        "Example app now running on:",
+        `- http://localhost:${port}`,
+        `- http://${require("ip").address()}:${port} (probably)`,
+    ].join("\n"));
+});
