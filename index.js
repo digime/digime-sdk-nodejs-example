@@ -8,7 +8,7 @@ const port = 8081;
 
 app.set('view engine', 'ejs');
 
-const customSDK = createSDK({path: "api.test04.devdigi.me"});
+const customSDK = createSDK({path: "api.test06.devdigi.me"});
 
 const APP = {
     appId: "[INSERT YOUR APP ID HERE]",
