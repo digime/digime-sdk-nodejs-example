@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
 const { createSDK } = require("digime-js-sdk");
-const { establishSession, getAppURL, getDataForSession, getWebURL } = createSDK({ host: "api.test06.devdigi.me" });
+const { establishSession, getAppURL, getDataForSession } = createSDK({ host: "api.test06.devdigi.me" });
 
 // Options that we will pass to the Digi.me SDK
 const APP = {
@@ -38,7 +38,6 @@ app.get('/', (req, res) => {
     establishSession(APP.appId, APP.contractId).then((session) => {
 
         /*
-         OPTION 1
          * Once the session is established we pass the Application ID, session, and a callback URL
          * to the "getAppUrl" to get a link to which you will need to direct the user to.
          *
@@ -56,22 +55,12 @@ app.get('/', (req, res) => {
          * When the Digi.me flow is complete, the user will be directed to this URL, with one of the following
          * added to the query string:
          *
-         * - consent=DATA_READY (User has approved our request, and data is available to be retrieved)
-         * - consent=CANCELLED (User has denied our request)
+         * - consent=APPROVED (User has approved our request, and data is available to be retrieved)
+         * - consent=DENIED (User has denied our request)
          *
-            const url = getAppURL(
-                APP.appId,
-                session,
-                `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
-            )
-        */
-
-        /*
-         OPTION 2
-         * This option is similar to one explained above but in this flow we will not use app url but web url
-         * Method will receive session and a callback URL to get a link to which you will need to direct the user to.
-        */
-        const url = getWebURL(
+         */
+        const url = getAppURL(
+            APP.appId,
             session,
             `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
         )
@@ -85,16 +74,16 @@ app.get('/', (req, res) => {
 app.get("/return", (req, res) => {
 
     // This is the result of consent request that was sent to Digi.me
-    const result = req.query.result;
+    const result = req.query.consent;
 
-    // If we did not get the response that the result was DATA_READY, there's not much we can do,
+    // If we did not get the response that the consent was APPROVED, there's not much we can do,
     // so we're just gonna stop and show an sad error page. :(
-    if (result !== "DATA_READY") {
+    if (result !== "APPROVED") {
         res.render('pages/error');
         return;
     }
 
-    // If we get do get the information that the result request was DATA_READY,
+    // If we get do get the information that the consent request was APPROVED,
     // the data is ready to be retrieved and consumed!
 
     // Here, we're using `getDataForSession` to retrieve the data from Digi.me API,
