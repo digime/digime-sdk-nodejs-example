@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
 const { createSDK } = require("digime-js-sdk");
-const { establishSession, getAppURL, getDataForSession } = createSDK({ host: "api.test06.devdigi.me" });
+const { establishSession, getAppURL, getDataForSession } = createSDK({ host: "api.test05.devdigi.me" });
 
 // Options that we will pass to the Digi.me SDK
 const APP = {
@@ -74,11 +74,11 @@ app.get('/', (req, res) => {
 app.get("/return", (req, res) => {
 
     // This is the result of consent request that was sent to Digi.me
-    const result = req.query.consent;
+    const result = req.query.result;
 
     // If we did not get the response that the consent was APPROVED, there's not much we can do,
     // so we're just gonna stop and show an sad error page. :(
-    if (result !== "APPROVED") {
+    if (result !== "DATA_READY") {
         res.render('pages/error');
         return;
     }
