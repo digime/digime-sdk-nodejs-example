@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
 const { createSDK } = require("digime-js-sdk");
-const { establishSession, getAppURL, getDataForSession } = createSDK({ host: "api.test05.devdigi.me" });
+const { establishSession, getWebURL, getDataForSession } = createSDK({ host: "api.test05.devdigi.me" });
 
 // Options that we will pass to the Digi.me SDK
 const APP = {
@@ -38,8 +38,11 @@ app.get('/', (req, res) => {
     establishSession(APP.appId, APP.contractId).then((session) => {
 
         /*
-         * Once the session is established we pass the Application ID, session, and a callback URL
+         * Once the session is established we have two options here:
+         * we can pass the Application ID, session and a callback URL
          * to the "getAppUrl" to get a link to which you will need to direct the user to.
+         * or we pass the session and a callback URL
+         * to the "getWebURL" to get a web link to which you will need to direct the user to.
          *
          * With regards to the callback URL:
          *
@@ -55,12 +58,11 @@ app.get('/', (req, res) => {
          * When the Digi.me flow is complete, the user will be directed to this URL, with one of the following
          * added to the query string:
          *
-         * - consent=APPROVED (User has approved our request, and data is available to be retrieved)
-         * - consent=DENIED (User has denied our request)
+         * - result=DATA_READY (User has approved our request, and data is available to be retrieved)
+         * - result=CANCELLED (User has denied our request)
          *
          */
-        const url = getAppURL(
-            APP.appId,
+        const url = getWebURL(
             session,
             `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
         )
