@@ -59,7 +59,7 @@ You are able to switch between the different user flows by either calling `getAp
 
 ### Going through the example - B. Guest Consent Flow
 
-You are able to switch between the different user flows by either calling `getAppURL` (mobile flow) or `getWebURL` (guest consent flow) from the SDK.
+You are able to switch between the different user flows by either calling `getAppURL` (mobile flow) or `getWebURL` (guest consent flow) from the SDK. By default, this example uses the guest consent flow.
 1. **Navigate to the example app** - Once you open up the second URL on your phone or laptop, you should see a screen that has a button that says `Launch Consent Request`
 
 2. **Provide consent** - Click on the `Launch Consent Request` button in the starting page. It should bring up digi.me consent page in another browser page. From this flow you should see the contract details, and upon giving consent, the user will need to onboard different services to provide the data that can be passed back to the example application. Once the services are onboarded, there will be a slight delay when data is being sync'd to the user personal cloud. When all the data has been collected, the user should be taken to a new page on the browser which displays `Thank you for your data!`
