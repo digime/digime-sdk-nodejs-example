@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
 const { createSDK } = require("digime-js-sdk");
-const { establishSession, getWebURL, getDataForSession } = createSDK({ host: "api.test05.devdigi.me" });
+const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK({ host: "api.test05.devdigi.me" });
 
 // Options that we will pass to the Digi.me SDK
 const APP = {
@@ -62,13 +62,19 @@ app.get('/', (req, res) => {
          * - result=CANCELLED (User has denied our request)
          *
          */
-        const url = getWebURL(
+        const weburl = getWebURL(
             session,
             `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
-        )
+        );
+
+        const appurl = getAppURL(
+            APP.appId,
+            session,
+            `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
+        );
 
         // Present the generated URL with a pretty template
-        res.render('pages/index', { url });
+        res.render('pages/index', { weburl, appurl });
     });
 });
 
@@ -78,6 +84,7 @@ app.get("/return", (req, res) => {
     // This is the result of consent request that was sent to Digi.me
     const result = req.query.result;
 
+    let consentdata = [];
     // If we did not get the response that the consent was APPROVED, there's not much we can do,
     // so we're just gonna stop and show an sad error page. :(
     if (result !== "DATA_READY") {
@@ -101,18 +108,18 @@ app.get("/return", (req, res) => {
             // This is where you deal with any data you receive from Digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
-            console.log("File data: \n", fileData);
+            fileData.forEach(function(element) {
+                consentdata.push(element);
+            });
         }
     );
 
     // `getDataForSession` returns a promise that will resolve once every file was processed.
     // Again, we're just logging to console here as an example
     data.then(() => {
-        console.log("All files processed");
+        // And we're just presenting a nice page here, thanking the user for their data!
+        res.render('pages/return', { consentdata });
     });
-
-    // And we're just presenting a nice page here, thanking the user for their data!
-    res.render('pages/return');
 });
 
 app.listen(port, () => {

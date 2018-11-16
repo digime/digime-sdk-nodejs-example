@@ -4,7 +4,14 @@
     <div class="consent-text center">
         Thank you for your data!
     </div>
-
+    <div class="json-view">
+        <% for (var i = 0; i < consentdata.length; i++) { %>
+            <pre class="new-item">
+                <h3>Shared Item <%= i+1 %> </h3>
+                <%= JSON.stringify(consentdata[i], null, "\t") %>
+            </pre>
+        <% } %>
+    </div>
 </div>
 
 <% include ../partials/footer %>
