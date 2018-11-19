@@ -13,22 +13,20 @@ app.set('view engine', 'ejs');
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
 const { createSDK } = require("digime-js-sdk");
-const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK({ host: "api.test05.devdigi.me" });
+const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK({ host: process.env.DIGIME_SDK_HOST });
 
 // Options that we will pass to the Digi.me SDK
 const APP = {
 
-    // Replace this string with the Application ID that was provided to you by Digi.me
-    appId: "[INSERT YOUR APP ID HERE]",
+    // Replace this value with the Application ID that was provided to you by Digi.me
+    appId: process.env.DIGIME_SDK_APP_ID,
 
-    // Replace this string with the Contract ID that was provided to you by Digi.me
-    contractId: "[INSERT YOUR CONTRACT ID HERE]",
+    // Replace this value with the Contract ID that was provided to you by Digi.me
+    contractId: process.env.DIGIME_SDK_CONTRACT_ID,
 
     // The key accepts a buffer or a string that contains a PKCS1 PEM key, here we are importing the key from a file
-    key: fs.readFileSync(path.resolve(__dirname, "path-to-your.key")),
-
-    // If you're storing this in an environment variable or something similar, you can simply pass it in, for example:
-    // key: process.env.digiMeSdkKey
+    // Replace process.env.DIGIME_SDK_PATH_TO_YOUR_KEY with path to your key.
+    key: fs.readFileSync(path.resolve(__dirname, process.env.DIGIME_SDK_PRIVATE_KEY)),
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
