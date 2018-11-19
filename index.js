@@ -26,7 +26,7 @@ const APP = {
 
     // The key accepts a buffer or a string that contains a PKCS1 PEM key, here we are importing the key from a file
     // Replace process.env.DIGIME_SDK_PATH_TO_YOUR_KEY with path to your key.
-    key: fs.readFileSync(path.resolve(__dirname, process.env.DIGIME_SDK_PRIVATE_KEY)),
+    key: process.env.DIGIME_SDK_PRIVATE_KEY,
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
