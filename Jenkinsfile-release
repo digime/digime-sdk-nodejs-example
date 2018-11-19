@@ -1,2 +1,2 @@
 def pipe = new me.digi.dev.NodeService()
-pipe.execute('10.13.0')
+pipe.execute()
