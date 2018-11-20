@@ -7,6 +7,7 @@ const app = express();
 const port = 8081;
 
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
 
 // If you have no need to modify init options, you should just import the necessary funcitons directly like so:
 // const { establishSession, getAppURL, getDataForSession } = require("digime-js-sdk");
@@ -24,8 +25,8 @@ const APP = {
     // Replace this value with the Contract ID that was provided to you by Digi.me
     contractId: process.env.DIGIME_SDK_CONTRACT_ID,
 
-    // The key accepts a buffer or a string that contains a PKCS1 PEM key, here we are importing the key from a file
-    // Replace process.env.DIGIME_SDK_PATH_TO_YOUR_KEY with path to your key.
+    // The key accepts a buffer or a string that contains a PKCS1 PEM key, here we are importing the key env var
+    // Replace process.env.DIGIME_SDK_PATH_TO_YOUR_KEY with your private key.
     key: process.env.DIGIME_SDK_PRIVATE_KEY,
 };
 
