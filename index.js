@@ -103,14 +103,18 @@ app.get("/return", (req, res) => {
     const data = getDataForSession(
         req.query.sessionId, // Our Session ID that we retrieved from the URL
         APP.key, // The private key we setup above
-        (fileData) => {
+        ({fileData, fileName}) => {
             // This is where you deal with any data you receive from Digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
-            fileData.forEach(function(element) {
-                consentdata.push(element);
+            fileData.forEach((element) => {
+                consentdata.push({
+                    element,
+                    fileName
+                });
             });
-        }
+        },
+        ({fileName, error}) => console.log(`Error retrieving file ${fileName}: ${error.toString()}`),
     );
 
     // `getDataForSession` returns a promise that will resolve once every file was processed.

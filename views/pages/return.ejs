@@ -7,8 +7,7 @@
     <div class="json-view">
         <% for (var i = 0; i < consentdata.length; i++) { %>
             <pre class="new-item">
-                <h3>Shared Item <%= i+1 %> </h3>
-                <%= JSON.stringify(consentdata[i], null, "\t") %>
+                <h3>Shared Item <%= i+1 %> from <%= consentdata[i].fileName %></h3><%= JSON.stringify(consentdata[i].element, null, "\t") %>
             </pre>
         <% } %>
     </div>
