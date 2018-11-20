@@ -1,0 +1,68 @@
+html, body {
+    height: 100%;
+    font-family: 'Raleway', sans-serif;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    background-color: #F0F0F0;
+}
+.main-container {
+    flex: 1 0 auto;
+}
+.footer {
+    flex-shrink: 0;
+    padding: 10px;
+}
+.title {
+    background-color: #D81B51;
+    padding: 10px 0px;
+    margin: 0;
+    color: #fff;
+    text-align: center;
+    font-weight: 300;
+}
+.consent-button {
+    background-color: #D81B51;
+    color: #fff;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 10px 20px;
+    width: 350px;
+    margin: 0 auto;
+    text-align: center;
+}
+.consent-url{
+    text-decoration: none;
+}
+.consent-text {
+    color: #666666;
+    font-size: 16px;
+    width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 100px 0 70px 0;
+}
+.center{
+    text-align: center;
+}
+.clb {
+    clear: both;
+}
+.json-view {
+    max-width: 1024px;
+    margin: 10px;
+    word-break: break-word;
+}
+.json-view pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+    max-width: 1024px;
+}
+.json-view pre h3 {
+    text-align: left;
+}
