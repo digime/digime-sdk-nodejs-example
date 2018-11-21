@@ -23,7 +23,7 @@ In order to run this example app, you'll need to perform some preparation steps:
 
 3. Run `npm install` in your terminal
 
-4. Open the `index.js` file in your favourite code editor, and replace/adjust the placeholders we populated the `APP` variable with the information you received from digi.me.
+4. Open the `index.js` file in your favourite code editor, and replace or adjust environment variable with values you received from digi.me (described in code comments as well).
 
 5. Run `npm start` in your terminal
 
@@ -44,7 +44,7 @@ In order to run this example app, you'll need to perform some preparation steps:
 
 ### Two user consent flows
 
-There are two ways for users to give consent to your digi.me library: 
+There are two ways for users to give consent to your digi.me library:
 A. Using digi.me mobile apps (recommended) - You need to have an Android or iOS device with the digi.me client installed. Currently, you will need a special build that digi.me can provide. Install the digi.me client and create a library with some data that we can share. If you would like a pre-populated library, you can connect to one of our existing libraries, please contact digi.me for details.
 B. Guest consent (demo) - We can offer a guest consent flow which asks for the user data from the browser. As part of this flow, the users will need to go through the adding of services to provide the data to be shared to your application. When the user data is ready, the callback URL will be called and you can then request user data using our SDK. This flow is currently in demo mode with improvements to come in the coming months.
 
