@@ -20,13 +20,17 @@ const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK(
 const APP = {
 
     // Replace this value with the Application ID that was provided to you by Digi.me
+    // We store our value for app_id in environment variable called DIGIME_SDK_APP_ID
+    // If you store it to same variable this does not need to be changed
     appId: process.env.DIGIME_SDK_APP_ID,
 
     // Replace this value with the Contract ID that was provided to you by Digi.me
+    // We store our value for contract_id in environment variable called DIGIME_SDK_CONTRACT_ID
+    // If you store it to same variable this does not need to be changed
     contractId: process.env.DIGIME_SDK_CONTRACT_ID,
 
-    // The key accepts a buffer or a string that contains a PKCS1 PEM key, here we are importing the key env var
-    // Replace process.env.DIGIME_SDK_PATH_TO_YOUR_KEY with your private key.
+    // We store our private key in in environment variable called DIGIME_SDK_PRIVATE_KEY
+    // If you store entire key into same variable this does not need to be changed
     key: process.env.DIGIME_SDK_PRIVATE_KEY,
 };
 
