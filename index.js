@@ -2,11 +2,11 @@ const express = require("express");
 const url = require("url");
 const trimEnd = require("lodash.trimend");
 
-const getBasePath = (req) => url.format({
+const getBasePath = (req) => process.env.DIGIME_SDK_CALLBACK_URL_BASE || url.format({
     protocol: req.protocol,
     host: req.headers.host,
     pathname: trimEnd(req.originalUrl, "/"),
-  });
+});
 
 // Some setup for the Express server
 const app = express();
