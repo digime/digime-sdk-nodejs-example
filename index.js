@@ -1,6 +1,12 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
+const url = require("url");
+const trimEnd = require("lodash.trimend");
+
+const getBasePath = (req) => url.format({
+    protocol: req.protocol,
+    host: req.headers.host,
+    pathname: trimEnd(req.originalUrl, "/"),
+  });
 
 // Some setup for the Express server
 const app = express();
@@ -67,13 +73,13 @@ app.get('/', (req, res) => {
          */
         const weburl = getWebURL(
             session,
-            `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
+            `${getBasePath(req)}/return?sessionId=${session.sessionKey}`
         );
 
         const appurl = getAppURL(
             APP.appId,
             session,
-            `http://${req.headers.host}/return?sessionId=${session.sessionKey}`
+            `${getBasePath(req)}/return?sessionId=${session.sessionKey}`
         );
 
         // Present the generated URL with a pretty template
