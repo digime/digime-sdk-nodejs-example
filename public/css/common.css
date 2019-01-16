@@ -54,15 +54,22 @@ body {
     clear: both;
 }
 .json-view {
-    max-width: 1024px;
+    width: 100%;
     margin: 10px;
     word-break: break-word;
 }
 .json-view pre {
     white-space: pre-wrap;
     word-break: keep-all;
-    max-width: 1024px;
+    width: 100%;
 }
 .json-view pre h3 {
     text-align: left;
+}
+
+.item-header {
+    border-bottom: #e0d4d4 solid 3px;
+    padding: 5px;
+    background-color: #e4dddf;
+    width: 100%;
 }

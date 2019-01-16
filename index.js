@@ -94,6 +94,7 @@ app.get("/return", (req, res) => {
     const result = req.query.result;
 
     let consentdata = [];
+    let totalItems = 0;
     // If we did not get the response that the consent was APPROVED, there's not much we can do,
     // so we're just gonna stop and show an sad error page. :(
     if (result !== "DATA_READY") {
@@ -113,15 +114,15 @@ app.get("/return", (req, res) => {
     const data = getDataForSession(
         req.query.sessionId, // Our Session ID that we retrieved from the URL
         APP.key, // The private key we setup above
-        ({fileData, fileName}) => {
+        ({fileData, fileName, fileDescriptor}) => {
             // This is where you deal with any data you receive from Digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
-            fileData.forEach((element) => {
-                consentdata.push({
-                    element,
-                    fileName
-                });
+            totalItems += fileData.length;
+            consentdata.push({
+                fileName,
+                fileDescriptor,
+                fileData
             });
         },
         ({fileName, error}) => console.log(`Error retrieving file ${fileName}: ${error.toString()}`),
@@ -131,7 +132,7 @@ app.get("/return", (req, res) => {
     // Again, we're just logging to console here as an example
     data.then(() => {
         // And we're just presenting a nice page here, thanking the user for their data!
-        res.render('pages/return', { consentdata });
+        res.render('pages/return', { consentdata, totalItems });
     });
 });
 
