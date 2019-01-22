@@ -1,6 +1,6 @@
 {
   "name": "digime-js-sdk-example",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "digime-js-sdk-example",
   "main": "index.js",
   "scripts": {
