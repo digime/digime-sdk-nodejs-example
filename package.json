@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "digime-js-sdk": "~0.1.2",
-    "lodash.trimend": "~4.5.1",
-    "node-rsa": "~1.0.1"
+    "lodash.trimend": "~4.5.1"
   }
 }
