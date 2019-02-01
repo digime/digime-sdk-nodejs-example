@@ -15,9 +15,9 @@ In order to run this example app, you'll need to perform some preparation steps:
 * git (optional)
 
 ## Installation
-1. [Download](https://github.com/digime/digime-js-sdk-example/archive/sdk.zip) and extract, or clone the `sdk` branch on this repo with the following command:
+1. [Download](https://github.com/digime/digime-js-sdk-example/archive/master.zip) and extract, or clone the `master` branch on this repo with the following command:
 
-    `git clone --single-branch -b sdk git@github.com:digime/digime-js-sdk-example.git`
+    `git clone https://github.com/digime/digime-js-sdk-example.git`
 
 2. In your terminal, navigate to the directory where you cloned/extracted this example (If you see this README in it, you're in the correct place!)
 
