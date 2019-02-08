@@ -16,10 +16,10 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 // If you have no need to modify init options, you should just import the necessary funcitons directly like so:
-// const { establishSession, getAppURL, getDataForSession } = require("digime-js-sdk");
+// const { establishSession, getAppURL, getDataForSession } = require("@digime/digime-js-sdk");
 
 // In this case, we're creating a new instance of SDK here because we want to specifiy different initialization options.
-const { createSDK } = require("digime-js-sdk");
+const { createSDK } = require("@digime/digime-js-sdk");
 const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK({ host: process.env.DIGIME_SDK_HOST });
 
 // Options that we will pass to the Digi.me SDK
