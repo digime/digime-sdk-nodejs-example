@@ -23,7 +23,7 @@ In order to run this example app, you'll need to perform some preparation steps:
 
 3. Run `npm install` in your terminal
 
-4. Open the `index.js` file in your favourite code editor, and replace or adjust environment variable with values you received from digi.me (described in code comments as well).
+4. Open the `index.js` file in your favourite code editor, and replace the placeholders with the values you received from digi.me (described in the code comments as well).
 
 5. Run `npm start` in your terminal
 

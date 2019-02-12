@@ -4,17 +4,6 @@
     <div class="consent-text center">
         Thank you for your data!
     </div>
-    <div class="json-view">
-        <h2>Total items received: <%= totalItems %></h2>
-        <% for (var i = 0; i < consentdata.length; i++) { %>
-            <pre>
-                <div class="item-header"><h2>File name: <%= consentdata[i].fileName %></h2><%= JSON.stringify(consentdata[i].fileDescriptor, null, "\t") %></div>
-                <% for (var j = 0; j < consentdata[i].fileData.length; j++) { %>
-                    <h3>Shared Item <%= j+1 %>%></h3><%= JSON.stringify(consentdata[i].fileData[j], null, "\t") %>
-                <% } %>
-            </pre>
-        <% } %>
-    </div>
 </div>
 
 <% include ../partials/footer %>
