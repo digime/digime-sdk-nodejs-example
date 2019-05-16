@@ -45,8 +45,30 @@ body {
     width: 600px;
     margin: 0 auto;
     text-align: left;
-    padding: 100px 0 70px 0;
+    padding: 50px 0 70px 0;
 }
 .center{
     text-align: center;
+}
+.clb {
+    clear: both;
+}
+.json-view {
+    width: 100%;
+    margin: 10px;
+    word-break: break-word;
+}
+.json-view pre {
+    white-space: pre-wrap;
+    word-break: keep-all;
+    width: 100%;
+}
+.json-view pre h3 {
+    text-align: left;
+}
+.item-header {
+    border-bottom: #e0d4d4 solid 3px;
+    padding: 5px;
+    background-color: #e4dddf;
+    width: 100%;
 }
