@@ -1,9 +1,38 @@
 <% include ../partials/header %>
 
 <div class="main-container">
-    <div class="consent-text center">
-        Thank you for your data!
-    </div>
+    <%if (errors.length > 0) { %>
+        <div class="json-view">
+            <% for (var i = 0; i < errors.length; i++) { %>
+                <pre class="new-item">
+                    <b>Error <%= i+1 %>: </b><%= JSON.stringify(errors[i], null, "\t") %>
+                </pre>
+            <% } %>
+        </div>
+    <% } %>
+    <%if (consentdata.length > 0) { %>
+        <div class="consent-text center">
+            Here is your data:
+        </div>
+        <div class="json-view">
+            <h2>Total items received: <%= totalItems %></h2>
+            <% for (var i = 0; i < consentdata.length; i++) { %>
+                <pre>
+                    <div class="item-header"><h2>File name: <%= consentdata[i].fileName %></h2><%= JSON.stringify(consentdata[i].fileDescriptor, null, "\t") %></div>
+                    <% for (var j = 0; j < consentdata[i].fileData.length; j++) { %>
+                        <h3>Shared Item <%= j+1 %>%></h3><%= JSON.stringify(consentdata[i].fileData[j], null, "\t") %>
+                    <% } %>
+                </pre>
+            <% } %>
+        </div>
+    <% } %>
+    <%if (errors.length === 0) { %>
+        <%if (consentdata.length === 0) { %>
+            <div class="consent-text center">
+                No data to display or data is not ready yet, please <span class="go-back">try later</span>.
+            </div>
+        <% } %>
+    <% } %>
 </div>
 
 <% include ../partials/footer %>

@@ -87,6 +87,11 @@ app.get('/', (req, res) => {
 // Here we are creating the return path, that was mentioned earlier and was passed to the `getAppURL` function.
 app.get("/return", (req, res) => {
 
+    // Next three variables are used for UI presentation only
+    let consentdata = [];
+    let totalItems = 0;
+    let errors = [];
+
     // This is the result of consent request that was sent to Digi.me
     const result = req.query.result;
 
@@ -109,21 +114,32 @@ app.get("/return", (req, res) => {
     const data = getDataForSession(
         req.query.sessionId, // Our Session ID that we retrieved from the URL
         APP.key, // The private key we setup above
-        (fileInfo) => {
+        ({fileData, fileName, fileDescriptor}) => {
             // This is where you deal with any data you receive from Digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
             console.log("============================================================================");
-            console.log("Retrieved: ", fileInfo.fileName);
+            console.log("Retrieved: ", fileName);
             console.log("============================================================================");
-            console.log("Descriptor:\n", JSON.stringify(fileInfo.fileDescriptor, null, 2));
-            console.log("Content:\n", JSON.stringify(fileInfo.fileData, null, 2));
+            console.log("Descriptor:\n", JSON.stringify(fileDescriptor, null, 2));
+            console.log("Content:\n", JSON.stringify(fileData, null, 2));
             console.log("============================================================================");
+
+            // Used to show total items and data we got on UI
+            totalItems += fileData.length;
+            consentdata.push({
+                fileName,
+                fileDescriptor,
+                fileData
+            });
         },
         ({fileName, error}) => {
             console.log("============================================================================");
             console.log(`Error retrieving file ${fileName}: ${error.toString()}`);
             console.log("============================================================================");
+
+            // Used to show errors on UI
+            errors.push(`Error retrieving file ${fileName}: ${error.toString()}`);
         },
     );
 
@@ -133,7 +149,7 @@ app.get("/return", (req, res) => {
         console.log("Data fetching complete.");
         console.log("============================================================================");
         // And we're just presenting a nice page here, thanking the user for their data!
-        res.render('pages/return');
+        res.render('pages/return', { errors, consentdata, totalItems });
     });
 });
 
