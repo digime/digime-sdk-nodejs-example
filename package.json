@@ -2,12 +2,13 @@
   "name": "digime-js-sdk-example",
   "version": "0.0.3",
   "description": "digime-js-sdk-example",
-  "main": "index.js",
+  "main": "",
   "scripts": {
     "test": "exit 0",
     "lint": "exit 0",
     "build": "exit 0",
-    "start": "node index.js"
+    "start": "npm run start:private-sharing",
+    "start:private-sharing": "node ./examples/private-sharing/index.js"
   },
   "repository": {
     "type": "git",

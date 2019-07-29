@@ -1,0 +1,95 @@
+html, body {
+    font-family: "Lato", sans-serif;
+}
+
+.page-header {
+    background-color: #000;
+    color: #FFF;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFF;
+    border-radius: 5px;
+    width: 32px;
+    height: 32px;
+}
+
+.logo > img {
+    width: 20px;
+}
+
+.acme-logo {
+    margin: 14px 16px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 25px;
+}
+
+.acme-logo > .logo {
+    margin-right: 10px;
+}
+
+.acme-logo > .acme-logo--name {
+    font-weight: 100;
+}
+
+.acme-logo > .acme-logo--name > b {
+    font-weight: 600;
+}
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-size: 18px;
+    border-radius: 50px;
+    color: #FFF;
+    background-color: #5561D3;
+    padding: 18px 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.cta-button.cta-button--pink {
+    background-color: #FF4A8B;
+}
+
+a.cta-button {
+    text-decoration: none;
+}
+
+.shop-container {
+    margin: 100px auto 0;
+    display: flex;
+    max-width: 575px;
+}
+
+.shop-container > .shop-container--left {
+    margin-right: 30px;
+}
+
+.shop-container > .shop-container--right > .shop-container--title {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 130%;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product-list > .product-list--product {
+    display: inline-flex;
+    width: 138px;
+    height: 138px;
+    border: 1px solid #000;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
