@@ -1,20 +1,15 @@
+// @ts-check
 const express = require("express");
-const url = require("url");
-const trimEnd = require("lodash.trimend");
 const fs = require("fs");
-
-const getBasePath = (req) => url.format({
-    protocol: req.protocol,
-    host: req.headers.host,
-    pathname: trimEnd(req.originalUrl, "/"),
-});
+const { getBasePath } = require("./../../utils");
 
 // Some setup for the Express server
 const app = express();
 const port = 8081;
 
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public'));
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views");
+app.use(express.static(__dirname + '/assets'));
 
 // If you need or want to specify different initialization options you can create the SDK like this:
 // const { createSDK } = require("@digime/digime-js-sdk");
@@ -34,7 +29,7 @@ const APP = {
 
     // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
     // If the file name is different please update it below.
-    key: fs.readFileSync("./digi-me-private.key"),
+    key: fs.readFileSync(__dirname + "/digi-me-private.key"),
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
@@ -68,41 +63,36 @@ app.get('/', (req, res) => {
          * - result=CANCELLED (User has denied our request)
          *
          */
-        const weburl = getWebURL(
+        const webUrl = getWebURL(
             session,
             `${getBasePath(req)}/return?sessionId=${session.sessionKey}`
         );
 
-        const appurl = getAppURL(
+        const appUrl = getAppURL(
             APP.appId,
             session,
             `${getBasePath(req)}/return?sessionId=${session.sessionKey}`
         );
 
         // Present the generated URL with a pretty template
-        res.render('pages/index', { weburl, appurl });
+        res.render("pages/index", { webUrl, appUrl });
     });
 });
 
 // Here we are creating the return path, that was mentioned earlier and was passed to the `getAppURL` function.
 app.get("/return", (req, res) => {
 
-    // Next three variables are used for UI presentation only
-    let consentdata = [];
-    let totalItems = 0;
-    let errors = [];
-
-    // This is the result of consent request that was sent to Digi.me
+    // This is the result of private sharing request that was sent to Digi.me
     const result = req.query.result;
 
-    // If we did not get the response that the consent was APPROVED, there's not much we can do,
+    // If we did not get the response that the private sharing was APPROVED, there's not much we can do,
     // so we're just gonna stop and show an sad error page. :(
     if (result !== "DATA_READY") {
-        res.render('pages/error');
+        res.render("pages/error");
         return;
     }
 
-    // If we get do get the information that the consent request was APPROVED,
+    // If we get do get the information that the private sharing request was APPROVED,
     // the data is ready to be retrieved and consumed!
 
     // Here, we're using `getDataForSession` to retrieve the data from Digi.me API,
@@ -124,22 +114,11 @@ app.get("/return", (req, res) => {
             console.log("Descriptor:\n", JSON.stringify(fileDescriptor, null, 2));
             console.log("Content:\n", JSON.stringify(fileData, null, 2));
             console.log("============================================================================");
-
-            // Used to show total items and data we got on UI
-            totalItems += fileData.length;
-            consentdata.push({
-                fileName,
-                fileDescriptor,
-                fileData
-            });
         },
         ({fileName, error}) => {
             console.log("============================================================================");
             console.log(`Error retrieving file ${fileName}: ${error.toString()}`);
             console.log("============================================================================");
-
-            // Used to show errors on UI
-            errors.push(`Error retrieving file ${fileName}: ${error.toString()}`);
         },
     );
 
@@ -149,7 +128,7 @@ app.get("/return", (req, res) => {
         console.log("Data fetching complete.");
         console.log("============================================================================");
         // And we're just presenting a nice page here, thanking the user for their data!
-        res.render('pages/return', { errors, consentdata, totalItems });
+        res.render("pages/return");
     });
 });
 
