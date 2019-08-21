@@ -14,7 +14,7 @@ app.use(express.static(__dirname + '/assets'));
 
 // If you need or want to specify different initialization options you can create the SDK like this:
 // const { createSDK } = require("@digime/digime-js-sdk");
-// const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK({ host: "api.digi.me" });
+// const { establishSession, getPostboxURL, pushDataToPostbox } = createSDK({ host: "api.digi.me" });
 
 // Since we do not need to specify different initialization options we will import the functions directly:
 const { establishSession, getPostboxURL, pushDataToPostbox } = require("@digime/digime-js-sdk");
