@@ -12,19 +12,20 @@ app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + '/assets'));
 
 // If you need or want to specify different initialization options you can create the SDK like this:
-// const { createSDK } = require("@digime/digime-js-sdk");
-// const { establishSession, getWebURL, getDataForSession, getAppURL } = createSDK({ host: "api.digi.me" });
+// const { init } = require("@digime/digime-js-sdk");
+// const { establishSession, getGuestAuthorizeUrl, getSessionData, getAuthorizeUrl } = init({ baseUrl: "https://api.development.devdigi.me/v1.4" });
+
 
 // Since we do not need to specify different initialization options we will import the functions directly:
-const { establishSession, getWebURL, getDataForSession, getAppURL } = require("@digime/digime-js-sdk");
+const { establishSession, getGuestAuthorizeUrl, getSessionData, getAuthorizeUrl } = require("@digime/digime-js-sdk");
 
-// Options that we will pass to the Digi.me SDK
+// Options that we will pass to the digi.me SDK
 const APP = {
 
-    // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by Digi.me
+    // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
     appId: "[PLACEHOLDER_APP_ID]",
 
-    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by Digi.me
+    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by digi.me
     contractId: "[PLACEHOLDER_CONTRACT_ID]",
 
     // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
@@ -63,12 +64,12 @@ app.get('/', (req, res) => {
          * - result=CANCELLED (User has denied our request)
          *
          */
-        const webUrl = getWebURL(
+        const webUrl = getGuestAuthorizeUrl(
             session,
             `${getBasePath(req)}/return?sessionId=${session.sessionKey}`
         );
 
-        const appUrl = getAppURL(
+        const appUrl = getAuthorizeUrl(
             APP.appId,
             session,
             `${getBasePath(req)}/return?sessionId=${session.sessionKey}`
@@ -87,7 +88,7 @@ app.get("/return", (req, res) => {
 
     // If we did not get the response that the private sharing was APPROVED, there's not much we can do,
     // so we're just gonna stop and show an sad error page. :(
-    if (result !== "DATA_READY") {
+    if (result !== "SUCCESS") {
         res.render("pages/error");
         return;
     }
@@ -95,17 +96,17 @@ app.get("/return", (req, res) => {
     // If we get do get the information that the private sharing request was APPROVED,
     // the data is ready to be retrieved and consumed!
 
-    // Here, we're using `getDataForSession` to retrieve the data from Digi.me API,
+    // Here, we're using `getSessionData` to retrieve the data from digi.me API,
     // by using the Session ID and the private key.
     //
     // Additionally, we're passing in the function that will receive data from the retrieved files.
     // This function serves as a callback function that will be called for each file, with the decrypted data,
     // after it was retrieved and decrypted with your key.
-    const data = getDataForSession(
+    const {filePromise} = getSessionData(
         req.query.sessionId, // Our Session ID that we retrieved from the URL
         APP.key, // The private key we setup above
         ({fileData, fileName, fileDescriptor}) => {
-            // This is where you deal with any data you receive from Digi.me,
+            // This is where you deal with any data you receive from digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
             console.log("============================================================================");
@@ -122,8 +123,8 @@ app.get("/return", (req, res) => {
         },
     );
 
-    // `getDataForSession` returns a promise that will resolve once every file was processed.
-    data.then(() => {
+    // `getSessionData` returns a promise that will resolve once every file was processed.
+    filePromise.then(() => {
         console.log("============================================================================");
         console.log("Data fetching complete.");
         console.log("============================================================================");
