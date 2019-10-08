@@ -13,19 +13,19 @@ app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + '/assets'));
 
 // If you need or want to specify different initialization options you can create the SDK like this:
-// const { createSDK } = require("@digime/digime-js-sdk");
-// const { establishSession, getPostboxURL, pushDataToPostbox } = createSDK({ host: "api.digi.me" });
+// const { init } = require("@digime/digime-js-sdk");
+// const { establishSession, getCreatePostboxUrl, pushDataToPostbox, getPostboxImportUrl } = init({ baseUrl: "https://api.digi.me" });
 
 // Since we do not need to specify different initialization options we will import the functions directly:
-const { establishSession, getPostboxURL, pushDataToPostbox } = require("@digime/digime-js-sdk");
+const { establishSession, getCreatePostboxUrl, pushDataToPostbox, getPostboxImportUrl } = require("@digime/digime-js-sdk");
 
-// Options that we will pass to the Digi.me SDK
+// Options that we will pass to the digi.me SDK
 const APP = {
 
-    // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by Digi.me
+    // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
     appId: "[PLACEHOLDER_APP_ID]",
 
-    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by Digi.me
+    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by digi.me
     contractId: "[PLACEHOLDER_CONTRACT_ID]",
 };
 
@@ -43,7 +43,7 @@ app.get("/send-receipt", (req, res) => {
     establishSession(APP.appId, APP.contractId).then((session) => {
 
         // Retrieve URL for opening the digi.me application with the correct parameters
-        const appUrl = getPostboxURL(
+        const appUrl = getCreatePostboxUrl(
             APP.appId,
             session,
             `${getOrigin(req)}/push?sessionKey=${session.sessionKey}`
@@ -58,7 +58,7 @@ app.get("/send-receipt", (req, res) => {
 app.get("/push", (req, res) => {
     const { result, postboxId, publicKey, sessionKey } = req.query;
 
-    const canPush = result === "POSTBOX_READY" && postboxId && publicKey && sessionKey;
+    const canPush = result === "SUCCESS" && postboxId && publicKey && sessionKey;
 
     if (!canPush) {
         res.render("pages/error");
@@ -79,7 +79,9 @@ app.get("/push", (req, res) => {
             accounts: [{ accountId: "1"}],
         },
     }).then(() => {
-        res.render("pages/return");
+        res.render("pages/return", {
+            actionUrl: getPostboxImportUrl()
+        });
         return;
     }).catch(() => {
         res.render("pages/error");
