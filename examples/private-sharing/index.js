@@ -28,9 +28,10 @@ const APP = {
     // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by digi.me
     contractId: "[PLACEHOLDER_CONTRACT_ID]",
 
-    // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
-    // If the file name is different please update it below.
-    key: fs.readFileSync(__dirname + "/digi-me-private.key"),
+    // Put your private key file (digi-me-private.key) provided by digi.me next to your index.js file.
+    // Replace [PLACEHOLDER_PATH_TO_PRIVATE_KEY] with the path to the key in relation to the private-sharing folder.
+    // For example, if the file is digi-me-private.key and next to the index.js file, put in /digi-me-private.key.
+    key: fs.readFileSync(__dirname + "[PLACEHOLDER_PATH_TO_PRIVATE_KEY]"),
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
