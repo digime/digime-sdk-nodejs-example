@@ -1,6 +1,6 @@
 {
   "name": "digime-js-sdk-example",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "digime-js-sdk-example",
   "main": "",
   "scripts": {
@@ -23,12 +23,12 @@
   "homepage": "https://github.com/digime/digime-js-sdk-example#readme",
   "devDependencies": {
     "@types/ip": "~1.1.0",
-    "ejs": "~2.6.1",
-    "express": "~4.16.4",
+    "ejs": "~2.7.4",
+    "express": "~4.17.1",
     "ip": "~1.1.5"
   },
   "dependencies": {
-    "@digime/digime-js-sdk": "~1.0.0",
+    "@digime/digime-js-sdk": "~1.1.0",
     "lodash.trimend": "~4.5.1"
   }
 }
