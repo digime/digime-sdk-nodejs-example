@@ -1,0 +1,29 @@
+@media only screen and (max-width: 600px) {
+    .genrefy-results-list .list-top-section .genre-name {
+        font-size: 42px;
+    }
+
+    .genrefy-results-list .list-top-section .song-count {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .genrefy-results-list .list-top-section .genre-name {
+        font-size: 34px;
+    }
+
+    .genrefy-results-list .list-top-section .song-count {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .genrefy-results-list .list-top-section .genre-name {
+        font-size: 26px;
+    }
+
+    .genrefy-results-list .list-top-section .song-count {
+        font-size: 14px;
+    }
+}

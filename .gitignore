@@ -13,3 +13,5 @@ node_modules
 # dev
 dev
 path-to-your.key
+examples/ongoing-private-sharing/users.json
+**/**/digi-me-private.key
