@@ -9,6 +9,7 @@
     "build": "exit 0",
     "start": "npm run start:private-sharing",
     "start:private-sharing": "node ./examples/private-sharing/index.js",
+    "start:ongoing-private-sharing": "node ./examples/ongoing-private-sharing/index.js",
     "start:postbox": "node ./examples/postbox/index.js"
   },
   "repository": {
@@ -28,7 +29,8 @@
     "ip": "~1.1.5"
   },
   "dependencies": {
-    "@digime/digime-js-sdk": "~1.1.0",
-    "lodash.trimend": "~4.5.1"
+    "@digime/digime-js-sdk": "~2.0.1",
+    "lodash.trimend": "~4.5.1",
+    "shortid": "~2.2.15"
   }
 }
