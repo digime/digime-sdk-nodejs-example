@@ -17,7 +17,7 @@ This repository contains example applications built on the [digi.me JavaScript S
 ## Preparation
 
 ### On the machine that will run the example you'll need:
-* Node version 8.6 or greater, with NPM
+* Node version 10.16 or greater, with NPM
 * git (optional)
 
 ## Installation
@@ -85,7 +85,7 @@ You are able to switch between the different user flows by either calling `getAu
 3. **See data shared** - After consent has been given, in the console log you should see a list of all the data that was received from the user. You should see the number of items that have been shared, all the objects listed per file, and a description of what kind of data has been listed under each file.
 
 ## To run the postbox example application
-In this example you will see how we are able to push data into a user's digi.me using Postbox. Before you can run the application you'll need: 
+In this example you will see how we are able to push data into a user's digi.me using Postbox. Before you can run the application you'll need:
 
 * Contract ID
 * Application ID
