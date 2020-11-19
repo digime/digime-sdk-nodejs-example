@@ -58,7 +58,7 @@ app.get("/send-receipt", (req, res) => {
 app.get("/push", (req, res) => {
     const { result, postboxId, publicKey, sessionKey } = req.query;
 
-    const canPush = result === "SUCCESS" && postboxId && publicKey && sessionKey;
+    const canPush = (result === "SUCCESS" || result === "POSTBOX_READY") && postboxId && publicKey && sessionKey;
 
     if (!canPush) {
         res.render("pages/error");
