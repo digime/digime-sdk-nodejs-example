@@ -3,6 +3,7 @@ const express = require("express");
 const fs = require("fs");
 const shortid = require('shortid');
 const { getOrigin } = require("./../../utils");
+const { URLSearchParams } = require("url");
 
 // Some setup for the Express server
 const app = express();
@@ -23,15 +24,17 @@ const { establishSession, exchangeCodeForToken, getSessionData, authorizeOngoing
 // Options that we will pass to the digi.me SDK
 const APP = {
 
+    // Visit https://go.digi.me/developers/register to get your Application ID
     // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
     appId: "[PLACEHOLDER_APP_ID]",
 
-    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by digi.me
-    contractId: "[PLACEHOLDER_CONTRACT_ID]",
+    // Visit https://developers.digi.me/sample-sharing-contracts for more info on sample contracts
+    // Replace test Contract ID with the Contract ID that was provided to you by digi.me
+    contractId: "yrg1LktWk2gldVk8atD5Pf7Um4c1LnMs",
 
     // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
     // If the file name is different please update it below.
-    key: fs.readFileSync(__dirname + "/digi-me-private.key"),
+    key: fs.readFileSync(__dirname + "/digi-me-example.key"),
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
@@ -49,7 +52,7 @@ app.get('/error', (req, res) => {
 });
 
 app.get("/fetch", async (req, res) => {
-    const userId = req.query.userId;
+    const userId = req.query.userId.toString();
 
     if(!userId){
         res.render("pages/error");
@@ -106,6 +109,7 @@ app.get("/fetch", async (req, res) => {
         users = {};
     }
 
+    const state = new URLSearchParams({ userId, sessionKey: session.sessionKey }).toString();
     const accessToken = users[userId] ? users[userId].accessToken : null;
     const authorizationResponse = await authorizeOngoingAccess(
         {
@@ -113,7 +117,7 @@ app.get("/fetch", async (req, res) => {
             contractId: APP.contractId,
             privateKey: APP.key,
             redirectUri: `${getOrigin(req)}/return`,
-            state: userId,
+            state,
             accessToken,
         },
         session,
@@ -149,7 +153,11 @@ app.get("/fetch", async (req, res) => {
 app.get("/return", async (req, res) => {
 
     // This is the result of private sharing request that was sent to Digi.me
-    const {code, result, sessionKey, state: userId} = req.query;
+    const {code, result, state} = req.query;
+
+    const params = new URLSearchParams(state.toString())
+    const sessionKey = params.get("sessionKey");
+    const userId = params.get("userId");
 
     // If we did not get the response that the private sharing was a SUCCESS, there's not much we can do,
     // so we're just gonna stop and show a sad error page. :(
@@ -170,8 +178,9 @@ app.get("/return", async (req, res) => {
             privateKey: APP.key,
             redirectUri: `${getOrigin(req)}/return`,
         },
+        code.toString(),
         users[userId].codeVerifier, // user ID is passed back as "state" from the digi.me flow.
-        code
+
     );
 
     users[userId] = {accessToken};
@@ -184,7 +193,7 @@ app.get("/return", async (req, res) => {
 });
 
 app.post("/file-list", (req, res) => {
-    getFileList(req.query.sessionKey).then((response) => {
+    getFileList(req.query.sessionKey.toString()).then((response) => {
         res.json(response);
     }).catch((e) => {
         // tslint:disable-next-line:no-console
@@ -217,16 +226,16 @@ app.get("/results", async (req, res) => {
     // This function serves as a callback function that will be called for each file, with the decrypted data,
     // after it was retrieved and decrypted with your key.
     const {filePromise} = getSessionData(
-        sessionKey, // Our Session ID that we retrieved from the URL
+        sessionKey.toString(), // Our Session ID that we retrieved from the URL
         APP.key, // The private key we setup above
-        ({fileData, fileName, fileDescriptor}) => {
+        ({fileData, fileName, fileMetadata}) => {
             // This is where you deal with any data you receive from digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
             console.log("============================================================================");
             console.log("Retrieved: ", fileName);
             console.log("============================================================================");
-            console.log("Descriptor:\n", JSON.stringify(fileDescriptor, null, 2));
+            console.log("Metadata:\n", JSON.stringify(fileMetadata, null, 2));
             console.log("Content:\n", JSON.stringify(fileData, null, 2));
             console.log("============================================================================");
 

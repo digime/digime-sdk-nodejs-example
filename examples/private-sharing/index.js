@@ -22,15 +22,17 @@ const { establishSession, getGuestAuthorizeUrl, getSessionData, getAuthorizeUrl 
 // Options that we will pass to the digi.me SDK
 const APP = {
 
+    // Visit https://go.digi.me/developers/register to get your Application ID
     // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
     appId: "[PLACEHOLDER_APP_ID]",
 
-    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by digi.me
-    contractId: "[PLACEHOLDER_CONTRACT_ID]",
+    // Visit https://developers.digi.me/sample-sharing-contracts for more info on sample contracts
+    // Replace test Contract ID with the Contract ID that was provided to you by digi.me
+    contractId: "fJI8P5Z4cIhP3HawlXVvxWBrbyj5QkTF",
 
     // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
     // If the file name is different please update it below.
-    key: fs.readFileSync(__dirname + "/digi-me-private.key"),
+    key: fs.readFileSync(__dirname + "/digi-me-example.key"),
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
@@ -103,16 +105,16 @@ app.get("/return", (req, res) => {
     // This function serves as a callback function that will be called for each file, with the decrypted data,
     // after it was retrieved and decrypted with your key.
     const {filePromise} = getSessionData(
-        req.query.sessionId, // Our Session ID that we retrieved from the URL
+        req.query.sessionId.toString(), // Our Session ID that we retrieved from the URL
         APP.key, // The private key we setup above
-        ({fileData, fileName, fileDescriptor}) => {
+        ({fileData, fileName, fileMetadata}) => {
             // This is where you deal with any data you receive from digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
             console.log("============================================================================");
             console.log("Retrieved: ", fileName);
             console.log("============================================================================");
-            console.log("Descriptor:\n", JSON.stringify(fileDescriptor, null, 2));
+            console.log("Metadata:\n", JSON.stringify(fileMetadata, null, 2));
             console.log("Content:\n", JSON.stringify(fileData, null, 2));
             console.log("============================================================================");
         },

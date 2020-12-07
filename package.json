@@ -31,6 +31,6 @@
   "dependencies": {
     "@digime/digime-js-sdk": "~3.0.1",
     "lodash.trimend": "~4.5.1",
-    "shortid": "~2.2.15"
+    "shortid": "~2.2.16"
   }
 }
