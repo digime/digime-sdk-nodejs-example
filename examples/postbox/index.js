@@ -22,11 +22,13 @@ const { establishSession, getCreatePostboxUrl, pushDataToPostbox, getPostboxImpo
 // Options that we will pass to the digi.me SDK
 const APP = {
 
+    // Visit https://go.digi.me/developers/register to get your Application ID
     // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
     appId: "[PLACEHOLDER_APP_ID]",
 
-    // Replace [PLACEHOLDER_CONTRACT_ID] with the Contract ID that was provided to you by digi.me
-    contractId: "[PLACEHOLDER_CONTRACT_ID]",
+    // Visit https://developers.digi.me/sample-sharing-contracts for more info on sample contracts
+    // Replace test Contract ID with the Contract ID that was provided to you by digi.me
+    contractId: "Cb1JC2tIatLfF7LH1ksmdNx4AfYPszIn",
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
@@ -69,7 +71,7 @@ app.get("/push", (req, res) => {
     const receipt = fs.readFileSync(filePath);
     const fileName = path.basename(filePath);
 
-    pushDataToPostbox(sessionKey, postboxId, publicKey, {
+    pushDataToPostbox(sessionKey.toString(), postboxId.toString(), publicKey.toString(), {
         fileData: receipt.toString("base64"),
         fileName,
         fileDescriptor: {
