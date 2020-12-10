@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+
+<div class="shop-container">
+    <div class="shop-container--left">
+        <img height="95" src="images/logo.svg" alt="ACMEShopper Logo" />
+    </div>
+
+    <div class="shop-container--right">
+        <h2 class="shop-container--title">
+            All done!
+        </h2>
+
+        <p>
+            Your purchase receipt, titled <b><%= receiptReference %></b> has been sent, please check and sync your digi.me library.
+        </p>
+
+        <a class="cta-button" href="<%= actionUrl %>" style="width: 267px">
+            Open digi.me
+        </a>
+
+        <a class="cta-button" id="pushReceipt" href="<%= pushAnotherUrl %>"
+            style="width: 267px" onclick="toggle(['pushReceipt', 'loading'])">
+            Push another receipt!
+        </a>
+
+        <p id="loading" style="display: none">
+            Pushing a new receipt. Please wait...
+        </p>
+    </div>
+</div>
+
+<% include ../partials/footer %>

@@ -15,11 +15,11 @@ app.use(express.static(__dirname + '/assets'));
 
 // If you need or want to specify different initialization options you can create the SDK like this:
 // const { init } = require("@digime/digime-js-sdk");
-// const { establishSession, exchangeCodeForToken, getSessionData, authorizeOngoingAccess, getFileList } = init({ baseUrl: "https://api.development.devdigi.me/v1.4" });
+// const { establishSession, authorize, pull } = init({ baseUrl: "https://api.digi.me/v1.5" });
 
 
 // Since we do not need to specify different initialization options we will import the functions directly:
-const { establishSession, exchangeCodeForToken, getSessionData, authorizeOngoingAccess, getFileList } = require("@digime/digime-js-sdk");
+const { establishSession, authorize, pull} = require("@digime/digime-js-sdk");
 
 // Options that we will pass to the digi.me SDK
 const APP = {
@@ -34,7 +34,7 @@ const APP = {
 
     // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
     // If the file name is different please update it below.
-    key: fs.readFileSync(__dirname + "/digi-me-example.key"),
+    key: fs.readFileSync(__dirname + "/digi-me-example.key").toString(),
 };
 
 // In this route, we are presenting the user with an action that will take them to digi.me
@@ -75,7 +75,11 @@ app.get("/fetch", async (req, res) => {
     }
 
     // First thing to do is to establish a session by using our Application ID and Contract ID
-    const session = await establishSession(APP.appId, APP.contractId, scope);
+    const session = await establishSession({
+        applicationId: APP.appId,
+        contractId: APP.contractId,
+        scope
+    });
 
     /*
     * Once we have a session, we can call "authorizeOngoingAccess" to see if we are authorized to fetch user data
@@ -100,52 +104,57 @@ app.get("/fetch", async (req, res) => {
     * blindly using the hostname from the request, which you probably shouldn't do.
     */
 
-    let users;
-    try {
-        // See if we already have an existing access token for this user. We have stored user tokens on
-        // a text file on the server. You may want to use a database for this.
-        users = JSON.parse(fs.readFileSync(__dirname + "/users.json", "utf8"));
-    } catch (error) {
-        users = {};
-    }
-
     const state = new URLSearchParams({ userId, sessionKey: session.sessionKey }).toString();
-    const accessToken = users[userId] ? users[userId].accessToken : null;
-    const authorizationResponse = await authorizeOngoingAccess(
-        {
+    const details = getUserbyId(userId);
+
+    // We have an existing token for this user. Try and fetch data directly.
+    if (details && details.accessToken) {
+        const {success, updatedAccessToken } = await pull.prepareFilesUsingAccessToken({
+            userAccessToken: details.accessToken,
+            session,
             applicationId: APP.appId,
             contractId: APP.contractId,
             privateKey: APP.key,
             redirectUri: `${getOrigin(req)}/return`,
-            state,
-            accessToken,
-        },
-        session,
-    );
+        });
 
-    if (authorizationResponse.dataAuthorized) {
-        // Authorization successful. The user token we have provided can be used to fetch.
-        const {updatedAccessToken} = authorizationResponse;
+        if (success) {
 
-        // The latest token is also passed back and can be stored on our server for future fetches. We have stored
-        // user tokens on a text file on the server. You may want to use a database for this.
-        users[userId] = {accessToken : updatedAccessToken};
-        fs.writeFileSync(__dirname + "/users.json", JSON.stringify(users));
+            // If an updated token is passed back it means it has been refreshed and can be updated on our server.
+            // We have stored user tokens on a text file in this example. You may want to use a database for this.
+            if (updatedAccessToken) {
+                saveUserInfo(userId, {accessToken : updatedAccessToken});
+            }
 
-        // With authorization success, we can forward the user to a page where we can display the data
-        res.redirect(`${getOrigin(req)}/preparing?sessionKey=${session.sessionKey}&userId=${userId}`);
-    } else {
-        // Authorization unsuccessful. We need to ask user for permission for their data.
-        const {authorizationUrl, codeVerifier} = authorizationResponse;
+            // With authorization success, we can forward the user to a page where we can display the data
+            res.redirect(`${getOrigin(req)}/preparing?sessionKey=${session.sessionKey}&userId=${userId}`);
+            return;
+        }
+    }
+
+    // We don't have an access token or it was invalid. We need to create one using the digi.me application.
+    try {
+        const {url, codeVerifier} = await authorize.ongoing.getPrivateShareConsentUrl({
+            applicationId: APP.appId,
+            contractId: APP.contractId,
+            privateKey: APP.key,
+            redirectUri: `${getOrigin(req)}/return`,
+            session,
+            state
+        });
 
         // We need to store the code verifier for this user so we can exchange for an access token further down the line
-        users[userId] = {codeVerifier};
-
-        fs.writeFileSync(__dirname + "/users.json", JSON.stringify(users));
+        saveUserInfo(userId, {codeVerifier});
 
         // Authorization URL can be called to prompt the user for consent. They will need to have
         // the digi.me client installed.
-        res.redirect(authorizationUrl);
+        res.redirect(url);
+
+    } catch(e) {
+        // tslint:disable-next-line:no-console
+        console.error(e.toString());
+        res.render("pages/error");
+        return;
     }
 });
 
@@ -169,38 +178,36 @@ app.get("/return", async (req, res) => {
     // Now that we have a code returned, together with the code verifier which we stored for this user earlier
     // we can exchange it for an access token by calling "exchangeCodeForToken". The other params are similar
     // to the ones we used in the "authorizeOngoingAccess" call earlier
-    const users = JSON.parse(fs.readFileSync(__dirname + "/users.json", "utf8"));
+    const details = getUserbyId(userId);
 
-    const accessToken = await exchangeCodeForToken(
-        {
-            applicationId: APP.appId,
-            contractId: APP.contractId,
-            privateKey: APP.key,
-            redirectUri: `${getOrigin(req)}/return`,
-        },
-        code.toString(),
-        users[userId].codeVerifier, // user ID is passed back as "state" from the digi.me flow.
-
-    );
-
-    users[userId] = {accessToken};
+    const accessToken = await authorize.exchangeCodeForToken({
+        applicationId: APP.appId,
+        contractId: APP.contractId,
+        privateKey: APP.key,
+        redirectUri: `${getOrigin(req)}/return`,
+        codeVerifier: details.codeVerifier,
+        authorizationCode: code.toString(),
+    });
 
     // Since they've given us ongoing consent, we can store the access token against the user so next time this user
     // logs in, we can use their access token to fetch their updated data without needing to use the digi.me app.
-    fs.writeFileSync(__dirname + "/users.json", JSON.stringify(users));
+    saveUserInfo(userId, {accessToken});
 
     res.redirect(`${getOrigin(req)}/preparing?sessionKey=${sessionKey}&userId=${userId}`)
 });
 
-app.post("/file-list", (req, res) => {
-    getFileList(req.query.sessionKey.toString()).then((response) => {
+app.post("/file-list", async (req, res) => {
+
+    try {
+        const response = await pull.getFileList({sessionKey: req.query.sessionKey.toString()})
         res.json(response);
-    }).catch((e) => {
+    }
+    catch(e) {
         // tslint:disable-next-line:no-console
         console.error(e.toString());
         res.status(404);
         res.end();
-    });
+    };
 });
 
 app.get("/preparing", async (req, res) => {
@@ -225,22 +232,25 @@ app.get("/results", async (req, res) => {
     // Additionally, we're passing in the function that will receive data from the retrieved files.
     // This function serves as a callback function that will be called for each file, with the decrypted data,
     // after it was retrieved and decrypted with your key.
-    const {filePromise} = getSessionData(
-        sessionKey.toString(), // Our Session ID that we retrieved from the URL
-        APP.key, // The private key we setup above
-        ({fileData, fileName, fileMetadata}) => {
+    const {filePromise} = pull.getSessionData({
+        sessionKey: sessionKey.toString(), // Our Session ID that we retrieved from the URL
+        privateKey: APP.key, // The private key we setup above
+        onFileData: ({fileData, fileName, fileMetadata}) => {
             // This is where you deal with any data you receive from digi.me,
             // in this case, we're just printing it out to the console.
             // You probably have a better idea on what to do with it! :)
+
+            const data = JSON.parse(fileData.toString("utf8"));
+
             console.log("============================================================================");
             console.log("Retrieved: ", fileName);
             console.log("============================================================================");
             console.log("Metadata:\n", JSON.stringify(fileMetadata, null, 2));
-            console.log("Content:\n", JSON.stringify(fileData, null, 2));
+            console.log("Content:\n", JSON.stringify(data, null, 2));
             console.log("============================================================================");
 
             // Begin preparing data for Genrefy App
-            fileData.forEach(playHistroyObject => {
+            data.forEach(playHistroyObject => {
                 if (
                     playHistroyObject &&
                     playHistroyObject.track &&
@@ -254,12 +264,12 @@ app.get("/results", async (req, res) => {
             });
             // End preparing data for Genrefy App
         },
-        ({fileName, error}) => {
+        onFileError: ({fileName, error}) => {
             console.log("============================================================================");
             console.log(`Error retrieving file ${fileName}: ${error.toString()}`);
             console.log("============================================================================");
         },
-    );
+    });
     await filePromise;
 
     // Begin preparing data for Genrefy App
@@ -293,6 +303,29 @@ app.get("/results", async (req, res) => {
         songsNumber: songsNumber,
     });
 });
+
+const getUsers = () => {
+    let users;
+    try {
+        // See if we already have an existing access token for this user. We have stored user tokens on
+        // a text file on the server. You may want to use a database for this.
+        users = JSON.parse(fs.readFileSync(__dirname + "/users.json", "utf8"));
+    } catch (error) {
+        users = {};
+    }
+
+    return users;
+}
+
+const getUserbyId = (id) => {
+    return getUsers()[id];
+}
+
+const saveUserInfo = (userId, details) => {
+    const users = getUsers();
+    users[userId] = details;
+    fs.writeFileSync(__dirname + "/users.json", JSON.stringify(users));
+}
 
 app.listen(port, () => {
     console.log([

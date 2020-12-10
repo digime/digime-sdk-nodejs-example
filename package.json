@@ -10,7 +10,8 @@
     "start": "npm run start:private-sharing",
     "start:private-sharing": "node ./examples/private-sharing/index.js",
     "start:ongoing-private-sharing": "node ./examples/ongoing-private-sharing/index.js",
-    "start:postbox": "node ./examples/postbox/index.js"
+    "start:postbox": "node ./examples/postbox/index.js",
+    "start:ongoing-postbox": "node ./examples/ongoing-postbox/index.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,7 @@
     "ip": "~1.1.5"
   },
   "dependencies": {
-    "@digime/digime-js-sdk": "~3.0.2",
+    "@digime/digime-js-sdk": "~4.0.0",
     "lodash.trimend": "~4.5.1",
     "shortid": "~2.2.16"
   }
