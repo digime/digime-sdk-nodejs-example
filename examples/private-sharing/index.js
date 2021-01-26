@@ -24,7 +24,7 @@ const APP = {
 
     // Visit https://go.digi.me/developers/register to get your Application ID
     // Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
-    appId: "[PLACEHOLDER_APP_ID]",
+    appId: "PLACEHOLDER_APP_ID",
 
     // Visit https://developers.digi.me/sample-sharing-contracts for more info on sample contracts
     // Replace test Contract ID with the Contract ID that was provided to you by digi.me
