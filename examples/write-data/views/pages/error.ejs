@@ -1,0 +1,17 @@
+<%- include("../partials/header") %>
+
+<div class="shop-container">
+    <div class="shop-container--left">
+        <img height="95" src="images/logo.svg" alt="ACMEShopper Logo" />
+    </div>
+
+    <div class="shop-container--right">
+        <h2 class="shop-container--title">
+            Ooops! <%= errorMessage %>
+        </h2>
+
+        Something went wrong, please <a href="/">try again</a>.
+    </div>
+</div>
+
+<%- include("../partials/footer") %>
