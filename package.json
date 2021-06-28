@@ -7,11 +7,9 @@
     "test": "exit 0",
     "lint": "exit 0",
     "build": "exit 0",
-    "start": "npm run start:private-sharing",
-    "start:private-sharing": "node ./examples/private-sharing/index.js",
-    "start:ongoing-private-sharing": "node ./examples/ongoing-private-sharing/index.js",
-    "start:postbox": "node ./examples/postbox/index.js",
-    "start:ongoing-postbox": "node ./examples/ongoing-postbox/index.js"
+    "start": "npm run start:read-example",
+    "start:read-example": "node ./examples/read-data/index.js",
+    "start:write-example": "node ./examples/write-data/index.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +28,8 @@
     "ip": "~1.1.5"
   },
   "dependencies": {
-    "@digime/digime-js-sdk": "~4.0.0",
+    "@digime/digime-js-sdk": "~5.0.0",
+    "lodash.tonumber": "~4.0.3",
     "lodash.trimend": "~4.5.1",
     "shortid": "~2.2.16"
   }

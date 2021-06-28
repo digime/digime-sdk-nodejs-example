@@ -20,7 +20,14 @@ const getBasePath = (req) => {
     });
 };
 
+const getQueryItems = (urlString) => {
+    const url = require("url");
+
+    return url.parse(urlString, true).query;
+};
+
 module.exports = {
     getOrigin,
     getBasePath,
+    getQueryItems,
 }
