@@ -28,7 +28,7 @@
     "ip": "~1.1.5"
   },
   "dependencies": {
-    "@digime/digime-js-sdk": "~5.0.0",
+    "@digime/digime-sdk-nodejs": "~5.1.0",
     "lodash.tonumber": "~4.0.3",
     "lodash.trimend": "~4.5.1",
     "shortid": "~2.2.16"
