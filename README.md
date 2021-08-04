@@ -11,8 +11,8 @@
     </a>
 </p>
 
-# Example applications built on the digi.me JavaScript SDK.
-This repository contains example applications built on the [digi.me JavaScript SDK](https://github.com/digime/digime-sdk-js/). There are two example applications in this repository. One showcases private sharing, and the other showcasing postbox. You can find out more able both of these in our [documentation](https://digime.github.io/digime-sdk-js/pages/guides/start.html).
+# Example applications built on the digi.me Node.js SDK.
+This repository contains example applications built on the [digi.me Node.js SDK](https://github.com/digime/digime-sdk-nodejs/). There are two example applications in this repository. One showcases private sharing, and the other showcasing postbox. You can find out more able both of these in our [documentation](https://digime.github.io/digime-sdk-nodejs/pages/guides/start.html).
 
 ## Preparation
 
@@ -21,9 +21,9 @@ This repository contains example applications built on the [digi.me JavaScript S
 * git (optional)
 
 ## Installation
-1. [Download](https://github.com/digime/digime-js-sdk-example/archive/master.zip) and extract, or clone the `master` branch on this repo with the following command:
+1. [Download](https://github.com/digime/digime-sdk-nodejs-example/archive/master.zip) and extract, or clone the `master` branch on this repo with the following command:
 
-    `git clone https://github.com/digime/digime-js-sdk-example.git`
+    `git clone https://github.com/digime/digime-sdk-nodejs-example.git`
 
 2. In your terminal, navigate to the directory where you cloned/extracted this example (If you see this README in it, you're in the correct place!)
 
@@ -83,4 +83,4 @@ To run the application, please run the command: `npm start:write-example`
 
 ## Checking out our SDK
 
-This example was built upon the digi.me JavaScript SDK. You can find more information [here](https://github.com/digime/digime-sdk-js/).
+This example was built upon the digi.me Node.js SDK. You can find more information [here](https://github.com/digime/digime-sdk-nodejs-example/).

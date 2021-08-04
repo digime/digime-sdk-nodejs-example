@@ -16,7 +16,7 @@ app.use(express.static(__dirname + "/assets"));
 
 // Options that we will pass to the digi.me SDK
 // Visit https://go.digi.me/developers/register to get your Application ID
-// Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
+// Replace "PLACEHOLDER_APP_ID" with the Application ID that was provided to you by digi.me
 const APP_ID = "PLACEHOLDER_APP_ID";
 
 // This object contains properties that are linked to the contract you're using.
@@ -36,7 +36,7 @@ const CONTRACT_DETAILS = {
 };
 
 // To initialize you can create the SDK like this:
-const { init } = require("@digime/digime-js-sdk");
+const { init } = require("@digime/digime-sdk-nodejs");
 const sdk = init({ applicationId: APP_ID });
 
 // In this route, we are presenting the user with an action that will take them to digi.me
@@ -71,7 +71,7 @@ app.get("/fetch", async (req, res) => {
   // callback - A callback if there are any errors. If successful, the redirect url linked to the contract will be used.
   // serviceId - 16 is the id of Spotify. You can replace this with the Service ID that you want to use.
   // To find out what services are available on digi.me:
-  // https://digime.github.io/digime-sdk-js/pages/fundamentals/available-services.html
+  // https://digime.github.io/digime-sdk-nodejs/pages/fundamentals/available-services.html
   // state - provide any information that can identify this user when authorization is complete.
   let authorizationOptions = {
     contractDetails: CONTRACT_DETAILS,

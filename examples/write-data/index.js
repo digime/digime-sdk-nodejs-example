@@ -15,7 +15,7 @@ app.use(express.static(__dirname + "/assets"));
 
 // Options that we will pass to the digi.me SDK
 // Visit https://go.digi.me/developers/register to get your Application ID
-// Replace [PLACEHOLDER_APP_ID] with the Application ID that was provided to you by digi.me
+// Replace "PLACEHOLDER_APP_ID" with the Application ID that was provided to you by digi.me
 const APP_ID = "PLACEHOLDER_APP_ID";
 
 // This object contains properties that are linked to the contract you're using.
@@ -36,7 +36,7 @@ const CONTRACT_DETAILS = {
 
 // To initialize you can create the SDK like this:
 // Only part required for initialization is the Application ID
-const { init } = require("@digime/digime-js-sdk");
+const { init } = require("@digime/digime-sdk-nodejs");
 const sdk = init({ applicationId: APP_ID });
 
 // In this route, we are presenting the user with an action that will take them to digi.me
