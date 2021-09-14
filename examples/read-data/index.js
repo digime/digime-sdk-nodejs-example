@@ -93,11 +93,11 @@ app.get("/fetch", async (req, res) => {
   // After the user has onboarded and finished with the authorization, the redirectUri provided in
   // contractDetails will be called.
   try {
-    const { url, codeVerifier } = await sdk.getAuthorizeUrl(authorizationOptions);
+    const { url, codeVerifier, session } = await sdk.getAuthorizeUrl(authorizationOptions);
 
     // Store the codeVerifer against this user to use later.
     if (codeVerifier) {
-      saveUserInfo(userId, { codeVerifier });
+      saveUserInfo(userId, { codeVerifier, session });
     }
 
     // Redirect the user to start the authorization process.
@@ -141,10 +141,19 @@ app.get("/return", async (req, res) => {
     saveUserInfo(userId, { accessToken: userAccessToken.accessToken.value });
   }
 
-  const { session } = await sdk.readSession({
-    contractDetails: CONTRACT_DETAILS,
-    userAccessToken: userAccessToken,
-  });
+  let session = details.session;
+
+  if (!session) {
+    // We should use the session returned in the authorization call to query data when we also need to authorize.
+    // If you already had a user access token from a previous session, you can get a new session from this call
+    // without authorization.
+    const results = await sdk.readSession({
+      contractDetails: CONTRACT_DETAILS,
+      userAccessToken: userAccessToken,
+    });
+
+    session = results.session
+  }
 
   res.redirect(
     `${getOrigin(req)}/preparing?sessionKey=${session.key}&userId=${userId}`
