@@ -16,3 +16,4 @@ path-to-your.key
 examples/ongoing-private-sharing/users.json
 examples/ongoing-postbox/users.json
 **/**/digi-me-private.key
+**/**/users.json
