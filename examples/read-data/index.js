@@ -35,6 +35,9 @@ const CONTRACT_DETAILS = {
   redirectUri: `http://localhost:8081/return`
 };
 
+// Set service id
+const SERVICE_ID = toNumber(16);
+
 // To initialize you can create the SDK like this:
 const { init } = require("@digime/digime-sdk-nodejs");
 const sdk = init({ applicationId: APP_ID });
@@ -76,7 +79,7 @@ app.get("/fetch", async (req, res) => {
   let authorizationOptions = {
     contractDetails: CONTRACT_DETAILS,
     callback: `${getOrigin(req)}/error`,
-    serviceId: toNumber(16),
+    serviceId: SERVICE_ID,
     state: new URLSearchParams({ userId }).toString(),
   };
 
