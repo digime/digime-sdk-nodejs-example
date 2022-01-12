@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const shortid = require("shortid");
 const { getOrigin } = require("./../../utils");
+const merge = require("lodash.merge");
 
 // Some setup for the Express server
 const app = express();
@@ -34,6 +35,21 @@ const CONTRACT_DETAILS = {
   redirectUri: `http://localhost:8081/exchange-token`
 };
 
+const CONTRACT_DETAILS_READ_RAW = {
+
+  // Visit https://developers.digi.me/sample-sharing-contracts for more info on sample contracts
+  // Replace test Contract ID with the Contract ID that was provided to you by digi.me
+  contractId: "slA5X9HyO2TnAxBIcRwf1VfpovcD1aQX",
+
+  // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
+  // If the file name is different please update it below.
+  privateKey: fs.readFileSync(__dirname + "/example-read-raw.key").toString(),
+
+  // The redirect URL is linked to your contract. It will be called at the end of the authorization step.
+  // For the default contract, this can be set to any correctly formatted URL.
+  redirectUri: `http://localhost:8081/data`
+};
+
 // To initialize you can create the SDK like this:
 // Only part required for initialization is the Application ID
 const { init } = require("@digime/digime-sdk-nodejs");
@@ -46,6 +62,143 @@ app.get("/", (req, res) => {
   res.render("pages/index", {
     actionUrl: `${getOrigin(req)}/send-receipt?userId=${userId}`,
   });
+});
+
+app.get("/data", async (req, res) => {
+
+  const { state, code } = req.query;
+  const params = new URLSearchParams(state.toString())
+  const userId = params.get("userId");
+  const details = getUserById(userId);
+  const exchangeCodeForTokenData = {
+    codeVerifier: details.readRawCodeVerifier,
+    authorizationCode: code.toString(),
+    contractDetails: CONTRACT_DETAILS_READ_RAW,
+  }
+
+  let sessionKey = undefined;
+  let session = undefined;
+
+  if (!details.sessionKey) {
+
+    const accessToken = await sdk.exchangeCodeForToken(exchangeCodeForTokenData)
+
+    const readSessionData = {
+      contractDetails: CONTRACT_DETAILS_READ_RAW,
+      userAccessToken: accessToken
+    }
+
+    session = await sdk.readSession(readSessionData);
+
+    writeToUser(userId, { sessionKey: session.session.key });
+
+    sessionKey = session.session.key;
+
+  } else {
+    sessionKey = details.sessionKey;
+  }
+
+  let results = [];
+
+  const newFilesHandler = async (files) => {
+    const data = await Promise.all(
+      files.map((file) =>
+        sdk.readFile({
+            sessionKey: sessionKey,
+            fileName: file.name,
+            privateKey: CONTRACT_DETAILS_READ_RAW.privateKey,
+          })
+        )
+    );
+
+    results = merge(results, data.reduce((acc, file) => {
+        const isJSON = file.fileMetadata.mimetype === "application/json";
+
+        const data = isJSON
+            ? JSON.parse(file.fileData.toString("utf-8"))
+            : Buffer.from(file.fileData).toString("base64");
+
+        return [
+            ...acc,
+            {
+                fileName: file.fileName,
+                fileMetadata: file.fileMetadata,
+                fileData: data,
+            },
+          ];
+    }, []));
+  };
+
+  let queryStatus = 'pending';
+  let offset = 0;
+
+  while (queryStatus !== 'partial' && queryStatus !== 'completed') {
+    const filesListResponse = await sdk.readFileList({ sessionKey: sessionKey });
+    queryStatus = filesListResponse.status.state;
+    const files = filesListResponse.fileList;
+    const newFiles = files ? files.slice(offset, files.length) : [];
+    offset = files ? files.length : 0;
+    if (newFiles.length > 0) {
+        await newFilesHandler(newFiles); // await for all files to be handled (i.e. retrieved) before fetching next available set
+    }
+    if (queryStatus == 'running' || queryStatus == 'pending') {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+
+  res.render("pages/data", {
+    data: results,
+  });
+});
+
+// Route hit by clicking on the "Send me the receipt button"
+app.get("/read-postbox", async (req, res) => {
+
+  if (APP_ID === "PLACEHOLDER_APP_ID") {
+    res.render("pages/error", {
+      errorMessage: "The Application ID isn't set."
+    });
+    return;
+  }
+
+  const userId = req.query.userId.toString();
+
+  const state = new URLSearchParams({ userId }).toString();
+  const details = getUserById(userId);
+
+  // getAuthorizeUrl object to be send to onboard and give us authorization
+  let authorizationOptions = {
+    contractDetails: CONTRACT_DETAILS_READ_RAW,
+    callback: `${getOrigin(req)}/error`,
+    state,
+  };
+
+  // We have an existing token for this user.
+  // Make sure to include any user access tokens you already have so we can link to the same library.
+  if (details && details.accessToken) {
+    authorizationOptions = {
+      ...authorizationOptions,
+      userAccessToken: details.accessToken,
+    };
+  }
+
+  // SDK API for user to onboard selected service and give us authorization
+  // After the user has onboarded and finished with the authorization, the redirectUri provided in
+  // contractDetails will be called.
+  try {
+    const { url, codeVerifier } = await sdk.getAuthorizeUrl(authorizationOptions);
+
+    if (codeVerifier) {
+      writeToUser(userId, { readRawCodeVerifier: codeVerifier });
+    }
+    // SaaS client will be called where we establish authorization and grant access to users data that we want.
+    res.redirect(url);
+  } catch (e) {
+    // tslint:disable-next-line:no-console
+    console.error(e.toString());
+    res.render("pages/error");
+    return;
+  }
 });
 
 // Route hit by clicking on the "Send me the receipt button"
@@ -149,6 +302,7 @@ app.get("/push", async (req, res) => {
   if (result.status === "delivered") {
     res.render("pages/return", {
       pushAnotherUrl: `${getOrigin(req)}/push?userId=${userId}`,
+      readPostbox: `${getOrigin(req)}/read-postbox?userId=${userId}`,
       receiptReference,
     });
   } else {

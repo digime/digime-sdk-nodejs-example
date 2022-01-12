@@ -1,0 +1,47 @@
+<%- include("../partials/header") %>
+
+<div class="shop-container">
+    <div class="shop-container--left">
+        <img height="95" src="images/logo.svg" alt="ACMEShopper Logo" />
+    </div>
+
+    <div class="shop-container--right">
+        <h2 class="shop-container--title">
+            Here is your data:
+        </h2>
+        <div>
+
+                  <% for(var i=0; i < data.length; i++) { %>
+                  <div>
+                    <div>
+                        <b>File name: </b><div class="lighter-text"><%= data[i].fileName %></div>
+                    </div>
+                    <br />
+                    <div>
+                        <div>
+                            <b>File metadata: </b>
+                        </div>
+                        <pre class="lighter-text">
+                            <%= JSON.stringify(data[i].fileMetadata, null, 2) %>
+                        </pre>
+                    </div>
+                    <br />
+                    <div>
+                        <div>
+                            <b>File: </b>
+                        </div>
+                        <pre>
+                            <%= JSON.stringify(data[i].fileData, null, 2) %>
+                        </pre>
+                    </div>
+                  </div>
+                  <br />
+                  <div>#########################################################</div>
+                  <br />
+                  <% } %>
+
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>
