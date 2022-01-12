@@ -7,6 +7,10 @@ html, body {
     color: #FFF;
 }
 
+.lighter-text {
+    color: #999;
+}
+
 .logo {
     display: flex;
     align-items: center;

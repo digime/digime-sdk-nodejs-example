@@ -10,17 +10,17 @@
             All done!
         </h2>
 
-        <p>
-            Your purchase receipt, titled <b><%= receiptReference %></b> has been sent.
-        </p>
+        <a class="cta-button" href="<%= readPostbox %>" style="width: 267px">
+            Read all data in your digi.me library
+        </a>
 
         <a class="cta-button" id="pushReceipt" href="<%= pushAnotherUrl %>"
             style="width: 267px" onclick="toggle(['pushReceipt', 'loading'])">
-            Push another receipt!
+            Write another data file to your digi.me library
         </a>
 
         <p id="loading" style="display: none">
-            Pushing a new receipt. Please wait...
+            Writing data. Please wait...
         </p>
     </div>
 </div>
