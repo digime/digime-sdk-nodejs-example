@@ -141,7 +141,7 @@ app.get("/return", async (req, res) => {
   if (userAccessToken.accessToken) {
     // Since they've given us ongoing consent, we can store the access token against the user so next time this user
     // logs in, we can use their access token to fetch their updated data without needing to use the digi.me app.
-    saveUserInfo(userId, { accessToken: userAccessToken.accessToken.value });
+    saveUserInfo(userId, { accessToken: userAccessToken });
   }
 
   let session = details.session;

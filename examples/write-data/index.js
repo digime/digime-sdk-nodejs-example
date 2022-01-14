@@ -72,7 +72,7 @@ app.get("/data", async (req, res) => {
   const details = getUserById(userId);
   const exchangeCodeForTokenData = {
     codeVerifier: details.readRawCodeVerifier,
-    authorizationCode: code.toString(),
+    authorizationCode: code ? code.toString() : "",
     contractDetails: CONTRACT_DETAILS_READ_RAW,
   }
 
@@ -90,9 +90,11 @@ app.get("/data", async (req, res) => {
 
     session = await sdk.readSession(readSessionData);
 
-    writeToUser(userId, { sessionKey: session.session.key });
-
     sessionKey = session.session.key;
+
+    details.sessionKey = sessionKey;
+
+    writeToUser(userId, details);
 
   } else {
     sessionKey = details.sessionKey;
@@ -189,7 +191,8 @@ app.get("/read-postbox", async (req, res) => {
     const { url, codeVerifier } = await sdk.getAuthorizeUrl(authorizationOptions);
 
     if (codeVerifier) {
-      writeToUser(userId, { readRawCodeVerifier: codeVerifier });
+      details.readRawCodeVerifier = codeVerifier;
+      writeToUser(userId, details);
     }
     // SaaS client will be called where we establish authorization and grant access to users data that we want.
     res.redirect(url);
