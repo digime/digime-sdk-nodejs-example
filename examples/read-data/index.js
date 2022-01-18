@@ -83,13 +83,23 @@ app.get("/fetch", async (req, res) => {
     state: new URLSearchParams({ userId }).toString(),
   };
 
-  // If we have an existing token for this user, then we can include it to link to the same library.
+  // If we have an existing token for this user, we can try to get the valid session for this user and skip onboard of SDK
   const details = getUserById(userId);
   if (details && details.accessToken) {
-    authorizationOptions = {
-      ...authorizationOptions,
-      userAccessToken: details.accessToken,
-    };
+    // If we can get a valid session with existing token then we can move to results page with this session and userId.
+    try {
+      const results = await sdk.readSession({
+        contractDetails: CONTRACT_DETAILS,
+        userAccessToken: details.accessToken,
+      });
+      res.redirect(
+        `${getOrigin(req)}/preparing?sessionKey=${results.session.key}&userId=${userId}`
+      );
+      return;
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.error(e.toString());
+    }
   }
 
   // SDK API for user to onboard selected service and give us authorization
