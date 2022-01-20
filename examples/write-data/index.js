@@ -57,7 +57,7 @@ const sdk = init({ applicationId: APP_ID });
 
 // In this route, we are presenting the user with an action that will take them to digi.me
 app.get("/", (req, res) => {
-  let userId = req.query.userId || shortid.generate();
+  let userId = (req.query.userId || req.query.userid) || shortid.generate();
 
   res.render("pages/index", {
     actionUrl: `${getOrigin(req)}/send-receipt?userId=${userId}`,
@@ -228,7 +228,14 @@ app.get("/send-receipt", async (req, res) => {
 
   // We have an existing token for this user.
   // Make sure to include any user access tokens you already have so we can link to the same library.
-  if (details && details.accessToken) {
+  if (details && details.accessToken && details.postboxId && details.publicKey) {
+    // If data stored has postbox and publicKey we are skipping authorization process.
+    if (details.postboxId && details.publicKey) {
+      res.redirect(
+        `${getOrigin(req)}/push?userId=${userId}`
+      );
+      return;
+    }
     authorizationOptions = {
       ...authorizationOptions,
       userAccessToken: details.accessToken,
