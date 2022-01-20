@@ -46,7 +46,7 @@ const sdk = init({ applicationId: APP_ID });
 app.get("/", (req, res) => {
 
   // In this example, let's assume we assign every user who hits the page a new user ID unless specified
-  let userId = req.query.userId || shortid.generate();
+  let userId = (req.query.userId || req.query.userid) || shortid.generate();
 
   // Present the generated URL with a pretty template
   res.render("pages/index", {
@@ -59,7 +59,7 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/fetch", async (req, res) => {
-  const userId = req.query.userId.toString() || shortid.generate();
+  const userId = (req.query.userId.toString() || req.query.userid.toString()) || shortid.generate();
 
   if (APP_ID === "PLACEHOLDER_APP_ID") {
     res.render("pages/error", {
