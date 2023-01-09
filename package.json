@@ -28,7 +28,7 @@
     "ip": "~1.1.5"
   },
   "dependencies": {
-    "@digime/digime-sdk-nodejs": "~6.0.2",
+    "@digime/digime-sdk-nodejs": "~8.0.0",
     "lodash.merge": "~4.6.2",
     "lodash.tonumber": "~4.0.3",
     "lodash.trimend": "~4.5.1",
