@@ -78,10 +78,11 @@ app.get("/data", async (req, res) => {
 
   let sessionKey = undefined;
   let session = undefined;
+  let accessToken = undefined;
 
   if (!details.sessionKey) {
 
-    const accessToken = await sdk.exchangeCodeForToken(exchangeCodeForTokenData)
+    accessToken = await sdk.exchangeCodeForToken(exchangeCodeForTokenData)
 
     const readSessionData = {
       contractDetails: CONTRACT_DETAILS_READ_RAW,
@@ -109,6 +110,8 @@ app.get("/data", async (req, res) => {
             sessionKey: sessionKey,
             fileName: file.name,
             privateKey: CONTRACT_DETAILS_READ_RAW.privateKey,
+            contractId: CONTRACT_DETAILS_READ_RAW.contractId,
+            userAccessToken: accessToken
           })
         )
     );
@@ -135,7 +138,12 @@ app.get("/data", async (req, res) => {
   let offset = 0;
 
   while (queryStatus !== 'partial' && queryStatus !== 'completed') {
-    const filesListResponse = await sdk.readFileList({ sessionKey: sessionKey });
+    const filesListResponse = await sdk.readFileList({ 
+      sessionKey: sessionKey,
+      contractId: CONTRACT_DETAILS_READ_RAW.contractId,
+      privateKey: CONTRACT_DETAILS_READ_RAW.privateKey,
+      userAccessToken: accessToken,
+    });
     queryStatus = filesListResponse.status.state;
     const files = filesListResponse.fileList;
     const newFiles = files ? files.slice(offset, files.length) : [];

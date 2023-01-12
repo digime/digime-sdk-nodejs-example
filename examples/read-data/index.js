@@ -174,9 +174,14 @@ app.get("/return", async (req, res) => {
 });
 
 app.post("/file-list", async (req, res) => {
+  const { userId } = req.query;
+  const details = getUserById(userId);
   try {
     const response = await sdk.readFileList({
       sessionKey: req.query.sessionKey.toString(),
+      privateKey: CONTRACT_DETAILS.privateKey,
+      contractId: CONTRACT_DETAILS.contractId,
+      userAccessToken: details.accessToken,
     });
     res.json(response);
   } catch (e) {
@@ -190,7 +195,7 @@ app.post("/file-list", async (req, res) => {
 app.get("/preparing", async (req, res) => {
   const { sessionKey, userId } = req.query;
   res.render("pages/preparing", {
-    checkFileListUrl: `${getOrigin(req)}/file-list?sessionKey=${sessionKey}`,
+    checkFileListUrl: `${getOrigin(req)}/file-list?sessionKey=${sessionKey}&userId=${userId}`,
     showResultsUrl: `${getOrigin(
       req
     )}/results?userId=${userId}&sessionKey=${sessionKey}`,
@@ -201,6 +206,7 @@ app.get("/preparing", async (req, res) => {
 app.get("/results", async (req, res) => {
   const { sessionKey, userId } = req.query;
   let genres = []; // Used for Genrefy App example
+  const details = getUserById(userId);
 
   // If we got the response from "readSession" that the data is authorized,
   // the data is ready to be retrieved and consumed!
@@ -214,6 +220,8 @@ app.get("/results", async (req, res) => {
   const { filePromise } = sdk.readAllFiles({
     sessionKey: sessionKey.toString(), // Our Session ID that we retrieved from the URL
     privateKey: CONTRACT_DETAILS.privateKey, // The private key we setup above
+    contractId: CONTRACT_DETAILS.contractId,
+    userAccessToken: details.accessToken,
     onFileData: ({ fileData, fileName, fileMetadata }) => {
       // This is where you deal with any data you receive from digi.me,
       // in this case, we're just printing it out to the console.
