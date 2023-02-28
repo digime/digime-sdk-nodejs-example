@@ -29,10 +29,6 @@ const CONTRACT_DETAILS = {
   // Put your private key file (digi-me-private.key) provided by Digi.me next to your index.js file.
   // If the file name is different please update it below.
   privateKey: fs.readFileSync(__dirname + "/digi-me-example.key").toString(),
-
-  // The redirect URL is linked to your contract. It will be called at the end of the authorization step.
-  // For the default contract, this can be set to any correctly formatted URL.
-  redirectUri: `http://localhost:8081/return`
 };
 
 // Set service id
@@ -71,14 +67,14 @@ app.get("/fetch", async (req, res) => {
   // Options to be sent to getAuthorizeUrl to trigger authorization
   //
   // contractDetails - contract we want to authorize. Make sure it is a contract for reading user data.
-  // callback - A callback if there are any errors. If successful, the redirect url linked to the contract will be used.
+  // callback - Redirect when authorization is done
   // serviceId - 16 is the id of Spotify. You can replace this with the Service ID that you want to use.
   // To find out what services are available on digi.me:
   // https://digime.github.io/digime-sdk-nodejs/pages/fundamentals/available-services.html
   // state - provide any information that can identify this user when authorization is complete.
   let authorizationOptions = {
     contractDetails: CONTRACT_DETAILS,
-    callback: `${getOrigin(req)}/error`,
+    callback: `${getOrigin(req)}/return`,
     serviceId: SERVICE_ID,
     state: new URLSearchParams({ userId }).toString(),
   };
