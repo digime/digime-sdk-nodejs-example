@@ -285,7 +285,8 @@ app.get("/push", async (req, res) => {
   const receiptReference = `Receipt ${new Date().toLocaleString()}`;
 
   try {
-    const result = await sdk.write({
+    const result = await sdk.pushData({
+      type: "library",
       contractDetails: CONTRACT_DETAILS,
       userAccessToken: details.accessToken,
       data: {
