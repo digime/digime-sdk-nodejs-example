@@ -15,9 +15,8 @@ app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + "/assets"));
 
 // Options that we will pass to the digi.me SDK
-// Visit https://go.digi.me/developers/register to get your Application ID
-// Replace "PLACEHOLDER_APP_ID" with the Application ID that was provided to you by digi.me
-const APP_ID = "PLACEHOLDER_APP_ID";
+// This APP_ID is just for testing example app, to get your Application ID Visit https://go.digi.me/developers/register 
+const APP_ID = "C8YhEFweYVpDTYtmXAJuzNXNNxkTo7xY";
 
 // This object contains properties that are linked to the contract you're using.
 const CONTRACT_DETAILS = {
@@ -156,13 +155,6 @@ app.get("/data", async (req, res) => {
 // Route hit by clicking on the "Send me the receipt button"
 app.get("/read-postbox", async (req, res) => {
 
-  if (APP_ID === "PLACEHOLDER_APP_ID") {
-    res.render("pages/error", {
-      errorMessage: "The Application ID isn't set."
-    });
-    return;
-  }
-
   const userId = req.query.userId.toString();
 
   const state = new URLSearchParams({ userId }).toString();
@@ -198,20 +190,15 @@ app.get("/read-postbox", async (req, res) => {
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.error(e.toString());
-    res.render("pages/error");
+    res.render("pages/error", {
+      errorMessage: e.toString()
+    });
     return;
   }
 });
 
 // Route hit by clicking on the "Send me the receipt button"
 app.get("/send-receipt", async (req, res) => {
-
-  if (APP_ID === "PLACEHOLDER_APP_ID") {
-    res.render("pages/error", {
-      errorMessage: "The Application ID isn't set."
-    });
-    return;
-  }
 
   const userId = req.query.userId.toString();
 
@@ -247,7 +234,9 @@ app.get("/send-receipt", async (req, res) => {
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.error(e.toString());
-    res.render("pages/error");
+    res.render("pages/error", {
+      errorMessage: e.toString()
+    });
     return;
   }
 });
@@ -256,7 +245,9 @@ app.get("/exchange-token", async (req, res) => {
   const { success, state, code } = req.query;
   const canPush = (success === "true") && state;
   if (!canPush) {
-      res.render("pages/error");
+      res.render("pages/error", {
+        errorMessage: "Something went wrong!"
+      });
       return;
   }
 
@@ -276,7 +267,9 @@ app.get("/exchange-token", async (req, res) => {
 app.get("/push", async (req, res) => {
   const { userId } = req.query;
   if (!userId) {
-      res.render("pages/error");
+      res.render("pages/error", {
+        errorMessage: "Something went wrong!"
+      });
       return;
   }
 
@@ -306,7 +299,9 @@ app.get("/push", async (req, res) => {
       receiptReference,
     });
   } catch {
-    res.render("pages/error");
+    res.render("pages/error", {
+      errorMessage: "Something went wrong!"
+    });
   }
       
 });
