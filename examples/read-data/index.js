@@ -15,9 +15,8 @@ app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + "/assets"));
 
 // Options that we will pass to the digi.me SDK
-// Visit https://go.digi.me/developers/register to get your Application ID
-// Replace "PLACEHOLDER_APP_ID" with the Application ID that was provided to you by digi.me
-const APP_ID = "PLACEHOLDER_APP_ID";
+// This APP_ID is just for testing example app, to get your Application ID Visit https://go.digi.me/developers/register 
+const APP_ID = "qgEUV8iJENRiUkuYF5lLpdsOv7Hp0biy";
 
 // This object contains properties that are linked to the contract you're using.
 const CONTRACT_DETAILS = {
@@ -51,18 +50,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/error", (req, res) => {
-  res.render("pages/error");
+  res.render("pages/error", {
+    errorMessage: "Something went wrong!"
+  });
 });
 
 app.get("/fetch", async (req, res) => {
   const userId = (req.query.userId.toString() || req.query.userid.toString()) || shortid.generate();
-
-  if (APP_ID === "PLACEHOLDER_APP_ID") {
-    res.render("pages/error", {
-      errorMessage: "The Application ID isn't set."
-    });
-    return;
-  }
 
   // Options to be sent to getAuthorizeUrl to trigger authorization
   //
@@ -114,7 +108,9 @@ app.get("/fetch", async (req, res) => {
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.error(e.toString());
-    res.render("pages/error");
+    res.render("pages/error", {
+      errorMessage: e.toString()
+    });
     return;
   }
 });
@@ -131,7 +127,9 @@ app.get("/return", async (req, res) => {
   // If we did not get the response that the private sharing was a SUCCESS, there's not much we can do,
   // so we're just gonna stop and show a sad error page. :(
   if (success !== "true") {
-    res.render("pages/error");
+    res.render("pages/error", {
+      errorMessage: "Something went wrong!"
+    });
     return;
   }
 
