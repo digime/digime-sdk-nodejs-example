@@ -334,7 +334,6 @@ app.listen(port, () => {
     [
       "Example app now running on:",
       `- http://localhost:${port}`,
-      `- http://${require("ip").address()}:${port} (probably)`,
     ].join("\n")
   );
 });

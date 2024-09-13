@@ -11,7 +11,8 @@ const getOrigin = (req) => {
 
 const getBasePath = (req) => {
     const url = require("url");
-    const trimEnd = require("lodash.trimend");
+
+    const trimEnd = (str, c = '\\s') => str.replace(new RegExp(`^(.*?)([${c}]*)$`), '$1')
 
     return url.format({
         protocol: req.protocol,
