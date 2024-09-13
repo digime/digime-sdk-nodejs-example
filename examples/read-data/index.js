@@ -2,7 +2,6 @@
 const express = require("express");
 const fs = require("fs");
 const shortid = require("shortid");
-const toNumber = require("lodash.tonumber");
 const { getOrigin } = require("./../../utils");
 const { URLSearchParams } = require("url");
 
@@ -31,7 +30,7 @@ const CONTRACT_DETAILS = {
 };
 
 // Set service id
-const SERVICE_ID = toNumber(16);
+const SERVICE_ID = 16;
 
 // To initialize you can create the SDK like this:
 const { init } = require("@digime/digime-sdk-nodejs");
@@ -327,7 +326,6 @@ app.listen(port, () => {
     [
       "Example app now running on:",
       `- http://localhost:${port}`,
-      `- http://${require("ip").address()}:${port} (probably)`,
     ].join("\n")
   );
 });
