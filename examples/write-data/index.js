@@ -2,8 +2,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const shortid = require("shortid");
-const { getOrigin } = require("./../../utils");
+const { getOrigin, randomUserId } = require("./../../utils");
 const merge = require("lodash.merge");
 
 // Some setup for the Express server
@@ -48,7 +47,7 @@ const sdk = init({ applicationId: APP_ID });
 
 // In this route, we are presenting the user with an action that will take them to digi.me
 app.get("/", (req, res) => {
-  let userId = (req.query.userId || req.query.userid) || shortid.generate();
+  let userId = (req.query.userId || req.query.userid) || randomUserId();
 
   res.render("pages/index", {
     actionUrl: `${getOrigin(req)}/send-receipt?userId=${userId}`,
