@@ -1,5 +1,8 @@
 // @ts-check
 
+const { customAlphabet } = require("nanoid")
+const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz';
+
 const getOrigin = (req) => {
     const url = require("url");
 
@@ -27,8 +30,13 @@ const getQueryItems = (urlString) => {
     return url.parse(urlString, true).query;
 };
 
+const randomUserId = () => {
+    return customAlphabet(alphabet, 10)()
+};
+
 module.exports = {
     getOrigin,
     getBasePath,
     getQueryItems,
+    randomUserId,
 }

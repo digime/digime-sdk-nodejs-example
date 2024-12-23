@@ -23,11 +23,14 @@
   "homepage": "https://github.com/digime/digime-js-sdk-example#readme",
   "devDependencies": {
     "ejs": "~3.1.10",
-    "express": "~4.21.0"
+    "express": "~4.21.2"
   },
   "dependencies": {
-    "@digime/digime-sdk-nodejs": "~15.2.1",
+    "@digime/digime-sdk-nodejs": "~16.1.0",
     "lodash.merge": "~4.6.2",
-    "shortid": "~2.2.16"
+    "nanoid": "~5.0.9"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

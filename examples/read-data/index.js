@@ -1,8 +1,7 @@
 // @ts-check
 const express = require("express");
 const fs = require("fs");
-const shortid = require("shortid");
-const { getOrigin } = require("./../../utils");
+const { getOrigin, randomUserId } = require("./../../utils");
 const { URLSearchParams } = require("url");
 
 // Some setup for the Express server
@@ -40,7 +39,7 @@ const sdk = init({ applicationId: APP_ID });
 app.get("/", (req, res) => {
 
   // In this example, let's assume we assign every user who hits the page a new user ID unless specified
-  let userId = (req.query.userId || req.query.userid) || shortid.generate();
+  let userId = (req.query.userId || req.query.userid) || randomUserId();
 
   // Present the generated URL with a pretty template
   res.render("pages/index", {
@@ -55,7 +54,7 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/fetch", async (req, res) => {
-  const userId = (req.query.userId.toString() || req.query.userid.toString()) || shortid.generate();
+  const userId = (req.query.userId.toString() || req.query.userid.toString()) || randomUserId();
 
   // Options to be sent to getAuthorizeUrl to trigger authorization
   //
