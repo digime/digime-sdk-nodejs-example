@@ -26,11 +26,11 @@
     "express": "~4.21.2"
   },
   "dependencies": {
-    "@digime/digime-sdk-nodejs": "~16.1.0",
+    "@digime/digime-sdk-nodejs": "~16.1.2",
     "lodash.merge": "~4.6.2",
-    "nanoid": "~5.0.9"
+    "nanoid": "~5.1.0"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.14.0"
   }
 }

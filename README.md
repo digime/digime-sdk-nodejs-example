@@ -20,7 +20,7 @@ This repository contains example applications built on the [digi.me Node.js SDK]
 
 ### On the machine that will run the example you'll need:
 
-- Node version 22.12.0 with NPM 10.9.0
+- Node version 22.14.0 with NPM 10.9.0
 - git (optional)
 
 ## Installation
