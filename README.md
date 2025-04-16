@@ -1,9 +1,6 @@
 ![](https://securedownloads.digi.me/partners/digime/SDKReadmeBanner.png)
 
 <p align="center">
-    <a href="https://developers.digi.me/slack/join">
-        <img src="https://img.shields.io/badge/chat-slack-blueviolet.svg" alt="Developer Chat">
-    </a>
     <a href="https://www.typescriptlang.org/">
         <img src="https://img.shields.io/badge/language-typescript-ff69b4.svg" alt="Typescript">
     </a>
@@ -14,7 +11,7 @@
 
 # Example applications built on the digi.me Node.js SDK.
 
-This repository contains example applications built on the [digi.me Node.js SDK](https://github.com/digime/digime-sdk-nodejs/). There are two example applications in this repository. One showcases private sharing, and the other showcasing push flow. You can find more on our NodeJS SDK [documentation](https://digime.github.io/digime-sdk-nodejs/index.html).
+This repository contains example applications built on the [digi.me Node.js SDK](https://github.com/worlddataexchange/digime-sdk-nodejs/). There are two example applications in this repository. One showcases private sharing, and the other showcasing push flow. You can find more on our NodeJS SDK [documentation](https://worlddataexchange.github.io/digime-sdk-nodejs/index.html).
 
 ## Preparation
 
@@ -25,9 +22,9 @@ This repository contains example applications built on the [digi.me Node.js SDK]
 
 ## Installation
 
-1. [Download](https://github.com/digime/digime-sdk-nodejs-example/archive/master.zip) and extract, or clone the `master` branch on this repo with the following command:
+1. [Download](https://github.com/worlddataexchange/digime-sdk-nodejs-example/archive/master.zip) and extract, or clone the `master` branch on this repo with the following command:
 
-   `git clone https://github.com/digime/digime-sdk-nodejs-example.git`
+   `git clone https://github.com/worlddataexchange/digime-sdk-nodejs-example.git`
 
 2. In your terminal, navigate to the directory where you cloned/extracted this example (If you see this README in it, you're in the correct place!)
 
@@ -63,4 +60,4 @@ To run write example application, please run the command: `npm run start:write-e
 
 ## Checking out our SDK
 
-This example was built upon the digi.me Node.js SDK. You can find more information [here](https://github.com/digime/digime-sdk-nodejs/).
+This example was built upon the digi.me Node.js SDK. You can find more information [here](https://github.com/worlddataexchange/digime-sdk-nodejs/).
