@@ -1,7 +1,7 @@
 {
-  "name": "digime-js-sdk-example",
+  "name": "@worlddataexchange/digime-js-sdk-example",
   "version": "1.0.0",
-  "description": "digime-js-sdk-example",
+  "description": "Example apps for using @worlddataexchange/digime-js-sdk",
   "main": "",
   "scripts": {
     "test": "exit 0",
@@ -13,20 +13,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/digime/digime-js-sdk-example.git"
+    "url": "git+https://github.com/worlddataexchange/digime-js-sdk-example.git"
   },
   "author": "digi.me Limited",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/digime/digime-js-sdk-example/issues"
+    "url": "https://github.com/worlddataexchange/digime-js-sdk-example/issues"
   },
-  "homepage": "https://github.com/digime/digime-js-sdk-example#readme",
+  "homepage": "https://github.com/worlddataexchange/digime-js-sdk-example#readme",
   "devDependencies": {
     "ejs": "~3.1.10",
     "express": "~5.1.0"
   },
   "dependencies": {
-    "@digime/digime-sdk-nodejs": "~16.1.4",
+    "@digime/digime-sdk-nodejs": "~16.1.5",
     "lodash.merge": "~4.6.2",
     "nanoid": "~5.1.5"
   },
